@@ -1,0 +1,202 @@
+{% extends 'format.html' %}
+
+	{% block description %}
+	<meta name="description" content="Engage with content creators, discover amazing projects, and connect with a vibrant community on seenIT. Share your voice and be seen.">
+	{% endblock %}
+			
+	{% block keywords %}
+	<meta name="keywords" content="seenIT, promote work, showcase talent, social networking, personal branding, online portfolio, connect with clients, advertise services, grow business, creative platform">
+	{% endblock %}
+
+	{% block title %}
+	<title>SeenIT Users Project – Engage with content creators, discover amazing projects, and connect with a vibrant community on seenIT. Share your voice and be seen.</title>
+	{% endblock %}
+
+	{% block style %}
+	<style>
+		.nba{
+			color: #172436;
+			background-color:  whitesmoke;
+			}
+
+			.backCol {
+
+			background-color:#172436
+		}
+
+		.banner {
+			background-color: #eee9;
+			height: inherit;
+		}
+
+		.banner2 {
+			background-color: #eee9;
+			height: inherit;
+			height: 200px;
+		}
+
+		.imgControl {
+			width: 115%;
+			height: 100px;
+		}
+
+		.imgControl2 {
+			width: 70%;
+			height: 300px;
+		}
+
+		.btnCol {
+			background-color: #172436;
+			color: ghostwhite;
+		}
+
+
+		a {
+			text-decoration: none;
+			color: #172436;
+		}
+
+		.fontOpen {
+			font-family: Open Sans, sans-serif;
+			color:#007aff;
+			font-size: 27px;				
+		}
+
+		.fontPoppins {
+				font-family:Poppins, sans-serif;
+				
+		}
+
+		.fontInter {
+				font-family: 'Inter', sans-serif;
+				color: #172436;
+		}
+
+
+	</style>
+	{% endblock %}
+
+{% block content %}
+<!--============================== Admin Container Starts Here ==================================-->
+<div class="container-fluid bigbody fontInter">
+
+	<!--==================== Cover&Profile Pics Starts Here ==========================-->
+							<div class="row align-items-center" style="background-image: url('/static/uploads/cover_pix/{{profile.cover_pix}}'); background-size: cover; background-repeat: no-repeat;">
+								<div class="col">
+									<img src = "/static/uploads/profile_pix/{{profile.profile_pix}}" alt="profile picture" id="{{user.id}}" style="width: 400px; height: 390px; border-radius: 240px;">
+								</div>
+	
+								<div class="col-md-5 banner rounded">
+									<div class="row">
+										<div class="col">
+											<h1>{{user.fname}} {{user.lname}}</h1>
+											<h2>{{user.username}}</h2>
+										</div>
+									</div>
+								</div>
+							</div>
+	
+	<!--============================= Cover&Profile Pics Ends Here ===================================-->
+	
+	
+	<!--====================== ContactMe/ViewProfile/AllProjects Starts Here =========================-->
+					<div class="row mb-5">
+							<div class="col" >
+								<a class="fw-bolder btn mt-4 btnCol" href="#">Contact Me</a>
+	
+								<a class="fw-bolder btn mt-4 btnCol" href="/profile/page/{{user.id}}/">View Profile</a>
+	
+								<a class="fw-bolder btn mt-4 btnCol" href="/all/projects/{{user.id}}/">All Projects</a>
+	
+							</div>
+					</div>
+	<!--====================== ContactMe/ViewProfile/AllProjects Ends Here ===========================-->
+	<div class="card my-3 shadow-sm">
+		<div class="card-body">
+			<h5 class="card-title text-center">{{ project.title }}</h5>
+			<p class="card-text text-center">
+				Explore the media from {{ user.fname }} {{ user.lname }}'s project.
+			</p>
+			
+			<div class="row justify-content-center">
+				{% if project.media %}
+					{% for media in project.media %}
+						{% if media.file_type == 'video' %}
+							<div class="col-md-6 mb-3 d-flex justify-content-center">
+								<video src="/static/uploads/project/project_video/{{ media.filename }}" 
+									   class="img-fluid rounded shadow-sm" 
+									   controls></video>
+							</div>
+						{% elif media.file_type == 'image' %}
+							<div class="col-md-6 mb-3 d-flex justify-content-center">
+								<img src="/static/uploads/project/project_pix/{{ media.filename }}" 
+									 class="img-fluid rounded shadow-sm">
+							</div>
+						{% endif %}
+					{% endfor %}
+					<hr>
+					<div>
+						<h3 class="text-center">Project Description</h3>
+						<p class="text-muted text-center">{{ project.description }}</p>
+					</div>
+					<hr>
+					<div class="card-footer">
+						<small class="text-body-secondary">Posted - {{project.datereg_project.strftime('%b %d, %Y at %I:%M %p')}}</small><br>
+						<small class="text-body-secondary">{{project.datereg_project|time_ago}}</small>
+					  </div>
+				{% else %}
+					<div class="col">
+						<p class="text-muted text-center">No media available for this project.</p>
+					</div>
+				{% endif %}
+			</div>
+		</div>
+	</div>
+	
+
+	<!--========================= Video/SmallImages/Display Starts Here ==============================-->
+					<!-- {% for p in projects %}
+						<div class="row mx-1 mb-1 banner">
+							{% for media in p.media %}
+								{% if media.file_type == 'video' %}
+								<div class="col d-flex align-items-center" style="min-height: 300px">
+									<video src="/static/uploads/project/project_video/{{ media.filename }}" 
+										class="img-fluid rounded" controls></video>
+								</div>
+								{% endif %}
+						
+								<div class="col d-flex">
+										{% if media.file_type == 'image' %}
+										<div class="col">
+											<img src="/static/uploads/project/project_pix/{{ media.filename }}" 
+												class="imgControl rounded">
+										</div>
+										{% endif %}
+								</div>
+								{% endfor %}
+
+						<div class="row justify-content-between mt-2">
+							<div class="col-3">
+								<button class="btn btn-outline-success">like <i class=" fa fa-thumbs-up"></i></button>
+							</div>
+						</div>
+					
+	<!--========================== Video/SmallImages/Display Ends Here ===============================-->
+	
+	
+	<!--========================= Like Button And Comment Starts Here ==============================-->
+						<!-- <div class="row banner2 mb-5 mx-1">
+							<h1>Project description</h1>
+							<p>{{project.description}}</p>
+						</div>
+				</div>				
+					{% endfor %} -->
+	<!--========================= Like Button And Comment Ends Here ==============================-->
+
+{% endblock %}
+
+
+
+
+							
+				

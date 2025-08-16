@@ -1,0 +1,82 @@
+
+			
+			
+<div class="container-fluid">
+
+<!--=============================== Navigation Bar starts Here  =================================-->
+{% if session.get('isonline') or session.get('adminisonline') %}
+<nav class="navbar navbar-expand-lg nba">
+    <div class="container-fluid">
+        <a class="navbar-brand p-3 text-dark fs-4" href="{{ url_for('home') }}">seenIT</a>
+        <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarTogglerDemo02" aria-controls="navbarTogglerDemo02" aria-expanded="false" aria-label="Toggle navigation">
+            <span class="navbar-toggler-icon"></span>
+        </button>
+        <div class="collapse navbar-collapse" id="navbarTogglerDemo02">
+            <ul class="navbar-nav me-auto mb-2 mb-lg-0">
+                <li class="nav-item">
+                    <a class="nav-link active" aria-current="page" href="{{ url_for('home') }}">Home</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="{{ url_for('about_us') }}">About Us</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="{{ url_for('contact') }}">Contact Us</a>
+                </li>
+                {% if session.get('isonline') and user %}
+                    <li class="nav-item">
+                        <h3><a class="text-dark text-decoration-none" href="{{ url_for('profile_page', id=user.id) }}">{{ user.fname }} {{ user.lname }}</a></h3>
+                    </li>
+                    <li>
+                        <small style="color: rgb(124, 183, 36); margin: 50px 50px; padding: 20px 0px;">online</small>
+                    </li>
+                {% elif admin is defined and admin %}
+                    <li class="nav-item">
+                        <h3>{{ admin.fname }} {{ admin.lname }}</h3>
+                    </li>
+                    <li>
+                        <a class="nav-link ms-2 text-warning" href="{{ url_for('admin_logout') }}">Logout</a>
+                    </li>
+                    <li>
+                        <small class="m-5" style="color: rgb(124, 183, 36);">online</small>
+                    </li>
+                {% else %}
+                    <li class="nav-item">
+                        <a class="nav-link" href="{{ url_for('signUp') }}">Sign Up</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="{{ url_for('userLogin') }}">Login</a>
+                    </li>
+                {% endif %}
+            </ul>
+            <form class="d-flex" action="{{ url_for('user_search') }}" role="search" method="post">
+                <input type="hidden" name="csrf_token" value="{{ csrf_token() }}">
+                <input class="form-control me-2"
+                       name="search_query"
+                       type="text"
+                       placeholder="Search"
+                       aria-label="Search"
+                       value="{{ search_query | default('') }}"/>
+                <button class="btn text-light" style="background-color:#172436" type="submit">Search</button>
+            </form>
+            <!-- Optional: Complete the dropdown menu if needed -->
+            {% if session.get('isonline') and user %}
+                <ul class="navbar-nav">
+                    <li class="nav-item dropdown">
+                        <a class="nav-link dropdown-toggle" href="#" id="navbarProfileDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+                            Profile
+                        </a>
+                        <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="navbarProfileDropdown">
+                            <li><a class="dropdown-item" href="{{ url_for('profile_page', id=user.id) }}">Profile</a></li>
+                            <li><hr class="dropdown-divider"></li>
+                            <li><a class="dropdown-item text-warning" href="{{ url_for('user_logout') }}">Logout</a></li>
+                        </ul>
+                    </li>
+                </ul>
+            {% endif %}
+        </div>
+    </div>
+</nav>
+{% endif %}
+
+<!--============================= Navigation Bar ends Here  ======================================-->
+				

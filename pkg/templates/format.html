@@ -1,0 +1,154 @@
+<!DOCTYPE html>
+<html>
+		<head>
+			<meta charset="utf-8">
+			<meta name="viewport" content="width=device-width, initial-scale=1">
+			{% block description %}
+			<meta name="description" content="Create your seenIT profile to showcase your talents, promote your work, and connect with individuals or organizations that matter. Get seen today.">
+			{% endblock %}
+			
+			{% block keywords %}
+			<meta name="keywords" content="seenIT, promote work, showcase talent, social networking, personal branding, online portfolio, connect with clients, advertise services, grow business, creative platform">
+			{% endblock %}
+			<meta name="author" content="Oyekanmi Ayodele">
+
+			<meta property="og:title" content="seenIT – Promote Your Work & Grow Your Network">
+			<meta property="og:description" content="Connect, promote, and grow your brand or talent. seenIT helps individuals and organizations showcase their work and reach new audiences.">
+			<meta property="og:image" content="">
+			<meta property="og:url" content="">
+			<meta property="og:type" content="website">
+			<meta property="og:site_name" content="seenIT">
+
+			<meta name="twitter:card" content="summary_large_image">
+			<meta name="twitter:title" content="seenIT – Promote Your Work & Grow Your Network">
+			<meta name="twitter:description" content="Connect, promote, and grow your brand or talent. seenIT helps individuals and organizations showcase their work and reach new audiences.">
+			<meta name="twitter:image" content="">
+			<meta name="twitter:site" content="@seenIT">
+
+
+			{% block title %}
+			{% endblock %}
+
+
+			<link rel="stylesheet" type="text/css" href="/static/bootstrap/css/bootstrap.css">
+			<link rel="stylesheet" type="text/css" href="/static/fontawesome/css/all.css">
+			<link rel="stylesheet" type="text/css" href="/static/fontawesome/css/fontawesome.css">
+			
+			<link href="https://fonts.googleapis.com/css2?family=Open+Sans&family=Poppins:wght@600&display=swap" rel="stylesheet">
+			<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+
+
+			{% block style %}
+			<style>
+				.nba{color: #191919;
+					background-color:  whitesmoke;
+				}
+
+				.usecolor {
+					color: #191919;
+				}
+
+				.overlay{
+					background-color:#F4F2EE ;
+				}
+
+
+				.hero {
+					
+					height: 500px;
+					background-image: url('/static/homepage-pix/thread.jpg');
+					background-position: center;
+					background-repeat: no-repeat;
+					background-size: cover;
+				}
+
+				.notHero {
+					background-color: #172436cc;
+				}
+
+				.hero2 {
+					height: 1000px;
+					background-image: url('/static/homepage-pix/graduation.jpg');
+					background-position: center;
+					background-repeat: no-repeat;
+					background-size: cover;
+					padding: 150px 50px;
+				}
+
+				.hero2Banner {
+					height: 700px;
+					background-color: #172436cc;
+					border-radius: 25px;
+					padding: 25px;
+					
+				}
+
+				.hero3Banner {
+					height: 300px;
+				}
+
+				.remove{
+					text-decoration: none;
+					color: #191919;
+				}
+
+				.signup {
+					
+					min-height: 200px;
+					margin-bottom: 100px;
+					margin-top: 100px;
+					color: floralwhite;
+					font-family: Open Sans, sans-serif;
+					/*font-family:Poppins, sans-serif;*/
+					/*font-family: 'Inter', sans-serif;*/
+					text-shadow: 20px;
+					/*background-color: #1854B9;*/
+					border-radius: 20px;
+					/*background-color: #007aff;;
+				} */
+				}
+
+				.signin {
+					margin-top: 100px;
+				}
+
+				.fontInter {
+					font-family: 'Inter', sans-serif;
+				}
+
+				.fontOpen {
+				font-family: Open Sans, sans-serif;
+				}
+
+				.fontPoppins {
+					font-family:Poppins, sans-serif;
+				}
+				
+
+			</style>
+			{% endblock %}
+
+		</head>
+
+		<body>
+			
+			
+			<div class="container-fluid nba">
+
+<!--=============================== Navigation Bar starts Here  =================================-->
+				{% include 'navbar.html' %}
+<!--============================= Navigation Bar ends Here  ======================================-->
+				{% block content %}
+				{% endblock %}
+
+			</div>
+		
+			<section>
+				{% include 'footer.html' %}
+			</section>
+			
+
+
+		</body>
+		<script src="/static/bootstrap/js/bootstrap.bundle.min.js"></script>
+</html>

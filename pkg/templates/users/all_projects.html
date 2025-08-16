@@ -1,0 +1,161 @@
+{% extends 'format.html' %}
+
+	{% block description %}
+	<meta name="description" content="Engage with content creators, discover amazing projects, and connect with a vibrant community on seenIT. Share your voice and be seen.">
+	{% endblock %}
+			
+	{% block keywords %}
+	<meta name="keywords" content="seenIT, promote work, showcase talent, social networking, personal branding, online portfolio, connect with clients, advertise services, grow business, creative platform">
+	{% endblock %}
+
+	{% block title %}
+	<title>SeenIT Users Project – Engage with content creators, discover amazing projects, and connect with a vibrant community on seenIT. Share your voice and be seen.</title>
+	{% endblock %}
+
+	{% block style %}
+	<style>
+		.nba{
+			color: #172436;
+			background-color:  whitesmoke;
+			}
+
+			.backCol {
+
+			background-color:#172436
+		}
+
+		.banner {
+			background-color: #eee9;
+			height: inherit;
+		}
+
+		.banner2 {
+			background-color: #eee9;
+			height: inherit;
+			height: 200px;
+		}
+
+		.imgControl {
+			width: 115%;
+			height: 100px;
+		}
+
+		.imgControl2 {
+			width: 70%;
+			height: 300px;
+		}
+
+		.btnCol {
+			background-color: #172436;
+			color: ghostwhite;
+		}
+
+
+		a {
+			text-decoration: none;
+			color: #172436;
+		}
+
+		.fontOpen {
+			font-family: Open Sans, sans-serif;
+			color:#007aff;
+			font-size: 27px;				
+		}
+
+		.fontPoppins {
+				font-family:Poppins, sans-serif;
+				
+		}
+
+		.fontInter {
+				font-family: 'Inter', sans-serif;
+				color: #172436;
+		}
+
+
+	</style>
+
+	{% endblock %}
+
+{% block content %}
+<!--============================== Admin Container Starts Here ==================================-->
+<div class="container-fluid bigbody fontInter">
+
+	<!--==================== Cover&Profile Pics Starts Here ==========================-->
+							<div class="row align-items-center" style="background-image: url('/static/uploads/cover_pix/{{ profile.cover_pix if profile.cover_pix else 'avatar.jpg' }}'); background-size: cover; background-repeat: no-repeat;">
+								<div class="col">
+									<img src = "/static/uploads/profile_pix/{{ profile.profile_pix if profile.profile_pix else 'avatar.jpg' }}" alt="profile picture" id="profilpicture" style="width: 400px; height: 390px; border-radius: 240px;">
+								</div>
+	
+								<div class="col-md-5 banner">
+									<div class="row">
+										<div class="col">
+											<h1>{{user.fname}} {{user.lname}}</h1>
+											<h2>{{user.username}}</h2>
+										</div>
+									</div>
+								</div>
+							</div>
+	
+	<!--============================= Cover&Profile Pics Ends Here ===================================-->
+	
+	
+	<!--====================== ContactMe/ViewProfile/AllProjects Starts Here =========================-->
+					<div class="row mb-5">
+							<div class="col" >
+								<a class="fw-bolder btn mt-4 btnCol" href="#">Contact Me</a>
+	
+								<a class="fw-bolder btn mt-4 btnCol" href="/profile/page/{{user.id}}/">View Profile</a>
+							</div>
+					</div>
+	<!--====================== ContactMe/ViewProfile/AllProjects Ends Here ===========================-->
+	
+	<!--========================= Projects Starts Here ==============================-->
+					 {% for p in projects %}
+					 <div class="row mx-1 mb-5 banner">
+					   <div class="card-group">
+						 <div class="card">
+						   <!-- Media Gallery Section - All media in one card -->
+						   <div class="media-gallery">
+							 {% for media in p.media %}
+							   {% if media.file_type == 'image' %}
+								 <img src="/static/uploads/project/project_pix/{{media.filename}}" 
+									  class="gallery-item img-fluid rounded" 
+									  alt="{{p.title}}">
+							   {% elif media.file_type == 'video' %}
+								 <video controls class="gallery-item img-fluid rounded">
+								   <source src="/static/uploads/project/project_video/{{media.filename}}">
+								 </video>
+							   {% endif %}
+							 {% endfor %}
+						   </div>
+						   
+						   <!-- Card Body -->
+						   <div class="card-body">
+							 <h2 class="card-title">Project Title</h2>
+							 <h3 class="card-text">{{p.title}}</h3>
+							 <hr>
+							 <h3 class="card-text">Description</h3>
+							 <p class="card-text">{{p.description}}</p>
+							 <a class="btn btn-outline-dark" href="/project/{{p.user.id}}/{{p.title}}/{{p.profile_id}}/">See more...</a>
+						   </div>
+						   
+						   <!-- Card Footer -->
+						   <div class="card-footer">
+							 <small class="text-body-secondary">Posted - {{p.datereg_project.strftime('%b %d, %Y at %I:%M %p')}}</small><br>
+							 <small class="text-body-secondary">{{p.datereg_project|time_ago}}</small>
+						   </div>
+						 </div>
+					   </div>
+					 </div>
+					 {% endfor %}
+	
+	<!--========================== Projects Ends Here ===============================-->
+{% endblock %}
+
+
+			
+
+			
+			
+				

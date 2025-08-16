@@ -1,0 +1,418 @@
+{% extends 'format.html' %}
+
+{% block description %}
+<meta name="description" content="Engage with content creators, discover amazing projects, and connect with a vibrant community on seenIT. Share your voice and be seen.">
+{% endblock %}
+            
+{% block keywords %}
+<meta name="keywords" content="seenIT, promote work, showcase talent, social networking, personal branding, online portfolio, connect with clients, advertise services, grow business, creative platform">
+{% endblock %}
+
+{% block title %}
+<title>SeenIT Hub – Engage with content creators, discover amazing projects, and connect with a vibrant community on seenIT. Share your voice and be seen.</title>
+{% endblock %}
+
+{% block style %}
+<style>
+    :root {
+        --primary: #4361ee;  /* Vibrant blue */
+        --secondary: #3a0ca3; /* Deep purple */
+        --accent: #f72585;   /* Pink accent */
+        --light: #f8f9fa;    /* Off-white */
+        --dark: #212529;     /* Dark gray */
+        --success: #4cc9f0;  /* Teal */
+    }
+
+    .bigbody {
+        min-height: 800px;
+        background-color: #f5f7fa;
+    }
+
+    .banner {
+        background: linear-gradient(135deg, var(--primary) 0%, var(--secondary) 100%);
+        min-height: 400px;
+        color: white;
+        box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+    }
+
+    .banner2 {
+        background-color: rgba(170, 170, 170, 0.9);
+    }
+
+    .banner3 {
+        background-color: white;
+        color: var(--dark);
+        border-radius: 8px;
+        box-shadow: 0 2px 4px rgba(0,0,0,0.05);
+    }
+
+    .nba {
+        color: #4B4B4B;
+    }
+
+    .bord {
+        min-height: 100px;
+    }
+
+    div {
+        min-height: 50px;
+    }
+
+    .fontOpen {
+        font-family: 'Open Sans', sans-serif;
+        color: var(--primary);
+        font-size: 27px;                
+    }
+
+    .fontPoppins {
+        font-family: 'Poppins', sans-serif;
+    }
+
+    .fontInter {
+        font-family: 'Inter', sans-serif;
+        color: ghostwhite;
+    }
+
+    .content1 {
+        text-decoration: none;
+        color: var(--dark);
+        transition: color 0.3s ease;
+    }
+
+    .content1:hover {
+        color: var(--accent);
+        text-decoration: none;
+    }
+
+    .content2 {
+        text-decoration: none;
+        background-color: rgba(0, 0, 0, 0.3);
+        color: ghostwhite;
+    }
+
+    li a {
+        text-decoration: none;
+        color: ghostwhite;
+    }
+
+    /* Enhanced Components */
+    .video-container {
+        border-radius: 8px;
+        overflow: hidden;
+        box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+        background-color: var(--dark);
+        margin-bottom: 1.5rem;
+    }
+
+    .video-container video {
+        width: 100%;
+        display: block;
+    }
+
+    .user-card {
+        background: white;
+        border-radius: 10px;
+        overflow: hidden;
+        box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+        transition: transform 0.3s ease, box-shadow 0.3s ease;
+        margin-bottom: 2rem;
+    }
+
+    .user-card:hover {
+        transform: translateY(-5px);
+        box-shadow: 0 10px 15px rgba(0,0,0,0.1);
+    }
+
+    .profile-img {
+        width: 80px;
+        height: 80px;
+        object-fit: cover;
+        border: 3px solid white;
+        box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+    }
+
+    .skill-badge {
+        background-color: var(--primary);
+        color: white;
+        padding: 0.25rem 0.75rem;
+        border-radius: 50px;
+        font-size: 0.8rem;
+        margin-right: 0.5rem;
+        margin-bottom: 0.5rem;
+        display: inline-block;
+    }
+
+    .btn-accent {
+        background-color: var(--accent);
+        color: white;
+        border: none;
+    }
+
+    .btn-accent:hover {
+        background-color: #d91a6d;
+        color: white;
+    }
+
+    .project-card {
+  border: 1px solid #ddd;
+  border-radius: 8px;
+  padding: 20px;
+  margin-bottom: 30px;
+  background: white;
+  box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+}
+
+.media-group {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px;
+  margin-top: 15px;
+}
+
+.media-item {
+  max-height: 200px;
+  max-width: 100%;
+  border-radius: 4px;
+  object-fit: cover;
+}
+
+
+.media-item video {
+  background: black;  
+}
+</style>
+{% endblock %}
+
+{% block content %}
+<div class="bigbody fontInter">
+    <!-- seenIT Hub Header -->
+    <div class="d-flex align-items-center banner3 justify-content-center" style="color: #4B4B4B; font-family: 'Inter'; height: 70px;">
+        <h1>seenIT Hub</h1>
+    </div>
+
+    <!-- Cover & Profile Section -->
+
+
+    <div class="row banner align-items-center mx-1" 
+        style="background-image: url('/static/uploads/cover_pix/{{ user.profile.cover_pix if user.profile.cover_pix else 'avatar.jpg' }}'); 
+									background-size: cover; 
+									background-repeat: no-repeat;">
+		<div class="col">
+			<img class="img-fluid rounded-circle" src = "/static/uploads/profile_pix/{{ user.profile.profile_pix if user.profile.profile_pix else 'avatar.jpg' }}" alt="profile picture" id="profilpicture" 
+										style="width: 400px; height: 380px;">
+		</div>
+	</div>
+
+    <!-- User Info Section -->
+    <div class="row align-items-center justify-content-between mt-4">
+        <div class="col-sm-3 fontInter">
+            <ul type="none">
+                <li class="btn btn-sm my-2" style="background-color: var(--primary);">
+                    <a class="text-white" href="#"><i class="fas fa-users me-2"></i>Followers</a>
+                    <span class="badge bg-white text-primary ms-2">100k</span>
+                </li>
+                <li class="btn btn-sm mb-2" style="background-color: var(--primary);">
+                    <a class="text-white" href="#"><i class="fas fa-bell me-2"></i>Notifications</a>
+                    <span class="badge bg-white text-primary ms-2">50+</span>
+                </li>
+                <li class="content">
+                    <select class="btn btn-sm text-white" style="background-color: var(--primary);">
+						
+                        <option value="">Category</option>
+                        {% for c in categories %}
+                            {% if c.name != "others" %}
+                                <option value="{{ c.id }}"><a href="#">{{ c.name }}</a></option>
+                            {% endif %}
+                        {% endfor %}
+                    </select>
+                </li>
+            </ul>
+        </div>
+
+        <div class="col-sm-7 p-4" style="background-color: white; border-radius: 8px; box-shadow: 0 2px 4px rgba(0,0,0,0.1);">
+            <h2><a class="text-dark" href="/profile/page/{{user.id}}">{{user.fname}} {{user.lname}}</a></h2>
+            <p class="text-muted">Let the world see what you've created.</p>
+        </div>
+    </div>
+
+    <!-- Project Form Section -->
+    <div class="row justify-content-center m-4">
+        <div class="col-lg-8">
+            <div class="card shadow-sm">
+                <div class="card-body">
+                    <form id="projectform" method="post" enctype="multipart/form-data">
+                        {{ form.csrf_token }} {{form.hidden_tag()}}
+                        <div id="info"></div>
+                        
+                        <h4 class="mb-3">Share Your Project</h4>
+                        <p class="text-muted mb-4">Tell your story — describe your work from start to finish, and upload pictures or videos to showcase your process and results.</p>
+                        
+                        <div class="mb-3">
+                            {{ form.title.label(class_="form-label") }}
+                            {{ form.title(class_="form-control", placeholder="Your Project title") }}
+                        </div>
+                        
+                        <div class="mb-3">
+                            {{ form.description.label(class_="form-label") }}
+                            {{ form.description(class_="form-control", rows="4", placeholder="Describe your project...") }}
+                        </div>
+                        
+                        <div class="mb-3">
+                            {{ form.projects.label(class_="form-label", multiple = True) }}
+                            {{ form.projects(class_="form-control") }}
+                            <small class="text-muted">Allowed: Images [jpg,jpeg,png,webp,gif] and Videos [mp4,mov,webm]</small>
+                        </div>
+                        
+                        <div class="d-grid">
+                            {{ form.upload(class_="btn btn-warning", id='btn') }}
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+    <!-- Community Projects Section -->
+    <div class="container mt-5 ">
+        <div class="row justify-content-center mb-5 banner2 rounded">
+            <div class="col-lg-10">
+                <h3 class="text-center mt-2"><i>Discover What Others Are Creating</i></h3>
+            </div>
+        </div>
+        
+    <!-- *************************************************************************************** -->
+    <!-- ****************** WORKING *********************** -->
+    <div class="row justify-content-center m-4">
+        {% for p in projects %}
+        <div class="col-4 mb-4">
+            <div class="card fontInter shadow-sm rounded" style="background-color: whitesmoke; color: rgb(65, 65, 59);">
+                <!-- Header with cover/profile -->
+                <div class="position-relative" style="background-image: url('/static/uploads/cover_pix/{{ p.owner.cover_pix | default('avatar.jpg') }}'); height: 200px; background-size: cover; background-position: center;">
+                    <div class="position-absolute" style="bottom: -50px; left: 20px;">
+                        <img src="/static/uploads/profile_pix/{{ p.owner.profile_pix | default('avatar.jpg') }}" 
+                             class="rounded-circle border border-light" style="width: 80px; height: 80px; object-fit: cover;">
+                    </div>
+                </div>
+                <div class="card-body pt-5">
+                    <h4 class="card-title mb-1">
+                        <a href="/profile/page/{{ p.user.id }}" class="text-dark"> {{ p.user.fname }} {{ p.user.lname }}</a>
+                    </h4>
+                    <a class="text-muted mb-2" href="/profile/page/{{ p.user.id }}">@{{ p.user.username }}</a> <br>
+                    {% if p.owner.category %}
+                        <span class="badge bg-primary mb-3">{{p.owner.category.name }}</span>
+                    {% endif %}
+                    <!-- Project Details -->
+                    <div class="projects-section">
+                        <div class="project-item mb-4 border-bottom pb-3">
+                            
+                            <h5 class="text-muted">Title:{{p.title }}</h5>
+                            <p class="text-muted">Description: {{ p.description | truncate(150) }}...</p>
+                            <hr>
+
+                            <div class="media-group">
+                                    {% for media in p.media %}
+                                        {% if media.file_type == 'image' %}
+                                <div class="modal-dialog modal-dialog-centered modal-dialog-scrollable">
+                                    <img src="/static/uploads/project/project_pix/{{ media.filename }}" 
+                                         class="img-fluid media-item rounded mb-3" alt="{{ p.title }}" style="max-height: 550px; width: 100%; object-fit: cover;">
+                                </div>
+                                        {% elif media.file_type == 'video' %}
+                                    <div class="video-container ratio ratio-16x9 mb-3">
+                                        <video controls class="rounded media-item">
+                                            <source src="/static/uploads/project/project_video/{{ media.filename }}" type="video/mp4">
+                                        </video>
+                                    </div>
+                                        {% endif %}
+                                    {% endfor %}
+                            </div>
+                            
+                            
+                            <div class="d-flex justify-content-between align-items-center">
+                                <small class="text-muted"></small>
+                                <div>
+                                    <button class="btn btn-sm btn-outline-primary me-2"><i class="far fa-heart"></i></button>
+                                    <button class="btn btn-sm btn-outline-secondary"><i class="far fa-comment"></i></button>
+                                </div>
+                            </div>
+                            <div>
+                                <a class="btn btn-warning" href="/project/{{p.user.id}}/{{p.title}}/{{p.profile_id}}/"> See more </a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        {% else %}
+        <div class="col-12">
+            <div class="text-center py-5">
+                <i class="fas fa-users fa-3x text-muted mb-3"></i>
+                <h4 class="text-muted">No projects found</h4>
+                <p>Be the first to share your work!</p>
+            </div>
+        </div>
+        {% endfor %}
+    </div>
+    <!-- ***************************************************************************************  -->
+    </div>
+</div>
+                
+   
+<!-- *************************************************** -->
+ 
+<script src="/static/jquery-3.7.1.min.js"></script>
+<script>
+    $(document).ready(function(){
+        $('#btn').click(function(event){
+            event.preventDefault();
+
+            var user_id = "{{user_id}}"
+            var csrf = '{{csrf_token()}}'
+            var form_data = new FormData($('#projectform')[0]);
+            
+            $.ajax({
+                url:'/seenIT/hub/db/',
+                type:'POST',
+                data: form_data,
+                cache: false,
+                contentType: false,
+                processData:false,
+                headers: {
+                    'X-CSRFToken': csrf
+                },
+                error:function(rsp){
+                    console.log(rsp)
+                    $('#info').addClass('alert alert-danger').html("An error occurred. Try again.").fadeIn();
+                    setTimeout(function(){
+                        window.location.href = "/seenIT/hub/";}, 3000);
+                },
+                
+                success: function(rsp){
+                    $('#info').removeClass('alert alert-danger alert-success').fadeOut(9000)
+            
+                    if (rsp.status == 'media') {
+                        $('#info').addClass('text-danger')
+                        $('#info').html(rsp.msg)
+        
+                    }else if(rsp.status == 'empty'){
+                        $('#info').addClass('alert alert-danger mt-2');
+                        $('#info').html(rsp.msg);
+                    }else{
+                        $('#info').addClass('alert alert-success mt-2');
+                        $('#info').html(rsp.msg);
+                        $('#projectform')[0].reset();
+                    }
+                },
+
+                beforeSend: function(){
+                    $('#info').html('<div class="spinner-border text-primary"><span class="visually-hidden">Loading...</span></div>')
+                },
+                complete: function(){
+                    $('#btn').html('Project Uploaded');
+                    setTimeout(function(){
+                        $('#btn').html('Upload Project');
+                    }, 2000);
+                }
+            })
+        })
+    })
+</script>
+{% endblock %}
