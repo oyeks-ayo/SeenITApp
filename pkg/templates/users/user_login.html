@@ -1,0 +1,204 @@
+{% extends 'format.html' %}
+
+	{% block description %}
+	<meta name="description" content="Log in to your seenIT account to promote your work, connect with your network, and manage your profile and content.">
+	{% endblock %}
+			
+	{% block keywords %}
+	<meta name="keywords" content="seenIT, promote work, showcase talent, social networking, personal branding, online portfolio, connect with clients, advertise services, grow business, creative platform">
+	{% endblock %}
+
+	{% block title %}
+	<title>Login – Promote Your Work & Grow Your Network</title>
+	{% endblock %}
+
+	{% block style %}
+	<style>
+
+		.nba{
+			background-color:ghostwhite;
+			color: #172436;
+		}
+
+
+		.bigbody {
+
+			min-height: 800px;
+			background-color: ghostwhite;
+
+		}
+
+		/*.backCol {
+			background-color:#007aff;
+			min-height: inherit;
+
+		}*/
+
+		.backWhite {
+			background-color: ghostwhite;
+			min-height: 200px;
+			
+		}
+
+		.backImg{
+			background-image: url('/static/login_pics/log.jpg');
+			background-size: contain;
+			background-position:center ;
+			background-repeat: no-repeat;
+			min-height: 800px;
+
+		}
+
+
+		.fontInter {
+				font-family: 'Inter', sans-serif;
+				color:#007aff;
+		}
+
+		.fontOpen {
+			font-family: open sans, sans-serif;
+			color:#007aff;
+			font-size: 17px;
+			/*background-color: rgba(150, 150, 150, 0.2);*/
+		}
+
+		.fontPoppins {
+				font-family:Poppins, sans-serif;
+				
+		}
+
+		</style>
+	{% endblock %}
+
+{% block content %}
+<!--======================= Background Color Starts Here ==========================-->
+<div class="backWhite">
+	<!--====================== Background Image Starts Here ==========================-->					<div class = "backImg">
+	<!--====================== Welcome Back Starts Here ==========================-->
+							<div class="fontOpen" style="color: #49494B;">
+								<h2>Welcome Back to <a class="badge" href="/" style="text-decoration: none; background-color:black;">seenIT</a></h2>
+								<p>Log in to manage your profile, share updates, and connect with your community.</p>
+	
+								 <a href="/admin/login/" class="badge text-bg-dark text-light" style="text-decoration: none;">Login as admin</a>
+							</div>
+	<!--======================== Welcome Back Ends Here ==============================-->
+	<!--========================= Login Form Starts Here =============================-->
+							<div class="col-12  me-5 mt-5 fontOpen">
+								
+										<div class="col-md-6" style="background-color: rgba(0, 0, 0, 0.3);min-height: 400px; padding: 20px; border-radius: 30px;">
+										{% with messages = get_flashed_messages(with_categories=true) %}
+											{% if messages %}
+												{% for category, message in messages %}
+												<div class="alert alert-{{ category }} alert-dismissible fade show mt-3" role="alert">
+													{{ message }}
+													<button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+												</div>
+												{% endfor %}
+											{% endif %}
+										{% endwith %}
+										<div class="info"></div>
+										<form class="p-5" action="" id="loginform" novalidate>
+											{{form.csrf_token}}
+											<div class="col-12 mb-3 form-floating">
+												{{form.uname(class_='form-control user', id = 'user', placeholder='Username/Phone/Email')}}
+												{{form.uname.label}}
+												<span id="details"></span>
+											</div>
+	
+											<div class="col-12 my-5 form-floating">
+												{{form.password(class_='form-control user', id='pwd1', placeholder='Password')}}
+												{{form.password.label}}
+												<span id="pwd"></span>
+											</div>
+
+											<div class="row">
+												<div class="col-6 mb-3 form-floating">
+													{{form.login(class_='btn btn-warning btn-lg text-light', id='btn')}}
+												</div>
+
+												<div class="col-6 mt-2">
+													<a class="text-decoration-none text-light" href="/user/reset/">forget password</a>
+												</div>
+											</div>
+
+											<div class="col-12 d-flex mt-2">
+												{{form.remember(class_= "form-check placeholder='remember me'")}}
+												{{form.remember.label(class_='text-light ms-2')}}
+										</div>
+										</form>
+									</div>
+							</div>
+	<!--========================= Login Form Ends Here ===============================-->
+	<!--==================== Don't Have An Account Starts Here =======================-->
+								<div class="text-center mt-3 text-light" style="background-color: rgba(0, 0, 0, 0.5);">
+									<h2> Don't have an account?</h2>
+									<p><a class="badge text-bg-dark text-decoration-none"  href="/signUp/">Sign Up here</a> and start showcasing your talent!</p>
+								</div>
+	
+	<!--==================== Don't Have An Account Ends Here =========================-->
+						</div>
+	<!--======================= Background Image Ends Here ==========================-->	
+					</div>
+	
+	<!--======================= Background Color Ends Here ==========================-->
+
+	<script src="/static/jquery-3.7.1.min.js"></script>
+		<script>
+			$(document).ready(function(){
+				$('#btn').click(function(event){
+					event.preventDefault();
+
+					var form_data = $('#loginform').serialize()
+
+					$.ajax({
+						url:'/userlogin/submit/',
+						type:'post',
+						data: form_data,
+						dataType: 'json',
+						error:function(rsp){
+							console.log(rsp)
+						},
+
+						success: function(rsp){
+							$('.info').removeClass('alert alert-danger alert-success').fadeOut(10000)
+							$('.user').click(function () {
+								$(this).removeClass('is-invalid')
+							})
+
+							if (rsp.status == 'danger') {
+								$('#details').addClass('text-warning')
+								$('#details').html(rsp.message)
+								$('#user').addClass('is-invalid')
+						
+							} else if (rsp.status == 'pwd'){
+								$('#pwd').addClass('text-warning')
+								$('#pwd').html(rsp.message)
+								$('#pwd1').addClass('is-invalid')
+
+							}else if (rsp.status == 'success'){
+								$('.form-control').val('')
+								document.location.href = rsp.message
+
+							}else  {
+							
+							$('.info').addClass('alert alert-danger mt-2');
+							$('.info').html(rsp.message);
+							$('#pwd1').addClass('is-invalid');
+							$('#user').addClass('is-invalid');
+						
+							}
+
+							
+						},
+
+						beforeSend: function(){
+							$('#info').html('<div class = "spinner-border text-warning ><span>Signing You Up. . .</span></div>')
+						},
+						complete: function(){
+							$('#btn').html('Welcome to SeenIT')
+						}
+					})
+				})
+			})
+		</script>
+{% endblock %}

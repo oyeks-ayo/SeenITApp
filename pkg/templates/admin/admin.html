@@ -1,0 +1,238 @@
+		{% extends 'format.html' %}
+
+		{% block description %}
+		<meta name="description" content="Engage with content creators, discover amazing projects, and connect with a vibrant community on seenIT. Share your voice and be seen.">
+		{% endblock %}
+				
+		{% block keywords %}
+		<meta name="keywords" content="seenIT, promote work, showcase talent, social networking, personal branding, online portfolio, connect with clients, advertise services, grow business, creative platform">
+		{% endblock %}
+	
+		{% block title %}
+		<title>SeenIT Admin – Engage with content creators, discover amazing projects, and connect with a vibrant community on seenIT. Share your voice and be seen.</title>
+		{% endblock %}
+	
+		{% block style %}
+		<style>
+			.bigbody {
+	
+				min-height: 800px;
+				background-color: #FAF7F8;
+				/*background-color: #007aff*/
+			}
+			
+
+			.nba{
+				color: #172436;
+				background-color:  whitesmoke;
+				}
+
+			.backCol {
+
+				background-color:#172436
+			}
+
+			.bord {
+				min-height: 200px;
+				margin-bottom: 10px;
+				align-items: center;
+				align-self: center;
+			}
+
+			.banner1 {
+				background-color: rgba(200, 200, 200, 0.8);
+				color: #172436;
+				text-align: center;
+				margin: 10px;
+				border-radius: 25px;
+				font-family: Open Sans, sans-serif;
+			}
+
+				.banner2 {
+				background-color: rgba(200, 200, 200, 0.8);
+				color: #172436;
+				height: 100px;
+			}
+
+			.fontOpen {
+				font-family: Open Sans, sans-serif;
+				color:#007aff;
+				font-size: 27px;				
+			}
+
+			.fontPoppins {
+					font-family:Poppins, sans-serif;
+					
+			}
+
+			.fontInter {
+					font-family: 'Inter', sans-serif;
+					color: #007aff;
+			}
+
+			.content {
+				text-decoration: none;
+				color: #172436;
+			}
+
+			.content2 {
+				text-decoration: none;
+				background-color: rgba(0, 0, 0, 0.3);
+				color: ghostwhite;
+			}
+
+			li a {
+				text-decoration: none;
+				
+				color: ghostwhite;
+			}
+
+		</style>
+	{% endblock %}
+
+{% block content %}
+<!--============================ Styles Ends Here ================================-->
+<!--======================= Navigation Bar starts Here  ==========================-->
+				
+<!--=============================== Admin Offcanvas Starts Here ==================================-->
+				<button class="btn btn-outline-dark p-1 text-light fs-4 backCol" type="button" data-bs-toggle="offcanvas" data-bs-target="#offcanvasWithBothOptions" aria-controls="offcanvasWithBothOptions">Panel</button>
+
+					<div class="offcanvas offcanvas-start" data-bs-scroll="true" tabindex="-1" id="offcanvasWithBothOptions" aria-labelledby="offcanvasWithBothOptionsLabel">
+					  <div class="offcanvas-header">
+					    <h5 class="offcanvas-title" id="offcanvasWithBothOptionsLabel">Dashboard</h5>
+					    <button type="button" class="btn-close" data-bs-dismiss="offcanvas" aria-label="Close"></button>
+					  </div>
+					  <div class="offcanvas-body">
+					  	<ul type="none">
+					  		<h5>STATISTICS</h5>
+					  		<li><a class="content1 ms-3" href="#" style="text-decoration: none; color:#172436;">Total Users = {{users|count}}<a/></li>
+					    	<li><a class="content1 ms-3" href="#" style="text-decoration: none; color:#172436;">Projects Posted = {{project_count}}</a></li>
+					  	</ul>
+					  </div>
+					</div>
+<!--=============================== Admin Offcanvas Ends Here ==================================-->
+
+<!--============================== Admin Container Starts Here ==================================-->
+			<div class="container-fluid bigbody fontInter">
+
+<!--============================= User Management Starts Here ====================================-->
+				<div class="row mt-5 bord banner1"style="background-image: url('admin_pics/user.jpg'); 
+								background-position: center; 
+								background-size: cover; 
+								height: 300px; 
+								border-radius: 25px;">
+						<div class="col" style="background-color: #dddc;
+												height: 100px;">
+							<h1 class="pt-3 fw-bold">USERS MANAGEMENT</h1>
+						</div>
+				</div>
+				<div>
+					{% with messages = get_flashed_messages(with_categories=True) %}
+						{% if messages %}
+							{% for cat, msg in messages %}
+								{% if cat == 'error' %}
+									<p class="alert alert-danger">{{ msg }}</p>
+								{% else %}
+									<p class="alert alert-success">{{ msg }}</p>
+								{% endif %}
+							{% endfor %}
+						{% endif %}
+					{% endwith %}
+					</div>
+				<div class="row mx-1 mb-5 bord">
+					<table class="table table-danger table-striped">
+						<tr>
+							<th class="bord banner1">USERS</th>
+							<th class="bord banner1">PROJECTS</th>
+							<th class="bord banner1">ACTION</th>
+						</tr>
+					<form action="/admin/dashboard/" method="post">
+							{{ form.hidden_tag() }}
+							{% if selected_user %}
+								<input type="hidden" name="selected_user_id" value="{{ selected_user.id }}">
+							{% endif %}
+							{% if selected_project %}
+								<input type="hidden" name="selected_project_id" value="{{ selected_project.id }}">
+							{% endif %}
+						<tr>
+							<td class="bord banner1">
+								
+								<select class="form-select form-select-lg"
+										name="selected_user"
+										onchange="this.form.submit()">
+									<option value="">USERS LIST</option>
+									{% for user in users %}
+									<option value="{{ user.id }}" 
+											{% if selected_user and user.id == selected_user.id %}
+											selected
+											{% endif %}>
+										{{ user.fname }} {{ user.lname }}
+									</option>
+									{% endfor %}
+								</select>
+							</td>
+							<td class="bord banner1">
+								<select class="form-select form-select-lg" 
+										name="selected_project"
+										onchange="this.form.submit()">
+									<option value="">PROJECTS LIST</option>
+									{% if selected_user %}
+										{% for project in selected_user.projects %}
+											<option value="{{ project.id }}" 
+													{% if selected_project and project.id == selected_project.id %}
+														selected
+													{% endif %}>
+													{{ project.title }}
+											</option>
+										{% endfor %}
+									{% endif %}
+								</select>
+							</td>
+							<td class="bord banner1">
+								<button type="submit" name="action" value="delete_project" class="btn btn-danger">
+									Delete selected project
+								</button>
+								<button type="submit" name="action" value="delete_user" class="btn btn-danger">
+									Delete selected user
+								</button>
+							</td>
+						</tr>
+					</form>
+					</table>
+				</div>
+<!--============================== User Management Ends Here =====================================-->
+
+<!--============================= Admin Dashboard Starts Here ====================================-->
+<div class="row bord mt-5 banner1"style="background-image: url('admin_pics/statistics.jpg'); 
+background-position: center; 
+background-size: cover; 
+height: 300px; 
+border-radius: 25px;">
+<div class="col" style="background-color: #dddc;
+				height: 100px;">
+<h1 class="pt-3 fw-bold">USERS STATISTICS</h1>
+</div>
+</div>
+
+<div class="row mx-1 mb-5 bord">
+<div class="col bord banner1">
+<h2 class="mt-2 fw-bold">TOTAL USERS</h2>
+<h1 class=" fw-bolder" style="font-size: 100px">{{users|count}}</h1>
+</div>
+
+<div class="col bord banner1">
+<h2 class="mt-2 fw-bold">TOTAL PROJECTS POSTED</h2>
+<h1 class=" fw-bolder" style="font-size: 100px">{{project_count}}</h1>
+</div>
+
+</div>
+
+
+<!--=============================== Admin Dashboard Ends Here ====================================-->
+<!--===================== Industry & Category Management Starts Here =============================-->
+				
+
+<!--====================== Industry & Category Management Ends Here ==============================-->
+
+<!--=========================== Admin Container Ends Here ==============================-->
+{% endblock %}

@@ -1,0 +1,16 @@
+{% extends 'format.html' %}
+
+	{% block description %}
+	{% endblock %}
+			
+	{% block keywords %}
+	{% endblock %}
+
+	{% block title %}
+	{% endblock %}
+
+	{% block style %}
+	{% endblock %}
+
+{% block content %}
+{% endblock %}

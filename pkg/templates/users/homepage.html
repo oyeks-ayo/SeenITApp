@@ -1,0 +1,105 @@
+{% extends 'format.html' %}
+
+		{% block description %}
+		<meta name="description" content= "Connect, promote, and grow your brand or talent. Our seenIT helps individuals and organizations showcase their work, reach new audiences, and build meaningful connections.">
+		{% endblock %}
+			
+		{% block keywords %}
+		<meta name="keywords" content="seenIT, promote work, showcase talent, social networking, personal branding, online portfolio, connect with clients, advertise services, grow business, creative platform">
+		{% endblock %}
+
+		{% block title %}
+		<title>seenIT : Homepage – Promote Your Work & Grow Your Network</title>
+		{% endblock %}
+
+
+{% block content %}
+
+<!--============================= Navigation Bar ends Here  ======================================-->
+				
+
+<div class="overlay">
+					
+	<!--================================== Hero Image starts Here=====================================-->			
+					<div class="hero">
+						<div class="row justify-content-center  fw-bolder">
+							<div 	class="col-md-9 shadow-lg" 
+									style="border-radius: 20px; text-align: center; 
+									background-color: #172436cc; 
+									padding: 100px 0px; margin-top: 6%; 
+									color: whitesmoke;">
+								<div>
+								<h2>seenIT</h2>
+								<h1>Promote Your Work & Grow Your Network</h1>
+								</div>
+	
+								<div>
+								<p>
+								seenIT helps individuals and their work reach new audiencies</p>
+								</div>
+							</div>
+						</div>
+					</div>
+	
+	<!--=================================== Hero Image Ends Here ====================================-->
+	
+	<!--=================================== Second Row starts Here ===================================-->	
+	
+						<div class="row justify-content-around">
+								<div class="col-md-5 signup pt-5 p-3 shadow-lg notHero";>
+									<h4>The possibilities are endless when it comes to finding the right people or partners to work with.</h4><br>
+									<h4 >Whether you're an individual or an organization, millions are ready to discover what you have to offer. 
+										Sign up now and take the first step.</h4>
+									<div class="d-grid gap-2 d-md-flex justify-content-md-end">
+										  <a href="{{url_for('signUp')}}" class="btn btn-warning btn-lg mt-2" type="button">Sign Up</a>
+									</div>
+								</div>
+								
+								<div class="col-md-5 signup shadow-lg notHero">
+									<div class="row signin">
+										<h4>Sign in to connect with millions and explore new opportunities.</h4><br>
+										<h4 class="mt-5">If they haven’t seen it, they won’t know it.</h4>
+										<div class="d-grid gap-2 d-md-flex justify-content-md-start">
+											  <a href="{{url_for('userLogin')}}" class="btn btn-warning btn-lg mt-5" type="button">Login</a>
+										</div>
+									</div>
+								</div>
+							</div>
+	<!--==================================== Second Row Ends Here ====================================-->
+	
+	<!--==================================== Third Row Starts Here ====================================-->
+							<div class="hero2">
+								<div class="row justify-content-evenly fontInter">
+									<div class ="mb-5 w-75 rounded text-light justify-content-center d-flex" style="background-color: #172436cc;;">
+										<h2>Who is <span class="badge text-bg-light mx-1">seenIT</span> for?</h2></div>
+									<div class="col-md-5 hero2Banner text-light fw-thin fs-4">
+										<p><i class="fa fa-solid fa-hammer text-light p-1 fs-1"></i>Skilled Workers & Artisans - Tailors, carpenters, farmers, welders, and more looking to showcase their work.</p>
+	
+										<p><i class="fa fa-solid fa-graduation-cap text-light pe-2 fs-1"></i>Students & Learners - Youths exploring careers, learning skills, or seeking inspiration from real work stories.</p>
+	
+										<img class="img-fluid p-2 h-50 w-100" src="/static/homepage-pix/atisans.jpg">
+									</div>
+									<div class="col-md-5 hero2Banner text-light fw-thin fs-4">
+										<p><i class="fa fa-solid fa-user-doctor text-light p-1 fs-1"></i>Freelancers & Creatives - Designers, content creators, and self-employed professionals sharing their process and finished projects.</p>
+	
+										<p><i class="fa fa-solid fa-magnifying-glass text-light pe-2 fs-1"></i>Job Seekers & Trainees - People looking for real-world examples of jobs and growth opportunities</p>
+	
+										<img class="img-fluid mt-4 p-3" src="/static/homepage-pix/freelance.jpg" style="height:333px; width: 500px;">
+									</div>
+								</div>
+							</div>
+	<!--==================================== Third Row Ends Here ====================================-->
+	
+	
+	<!--==================================== Fourth Row Starts Here ==================================-->
+							<div class="row">
+								<div class="col mt-1">
+									<img class="justify-content-evenly" src="/static/homepage-pix/seenIT.png" style="height: 400px; width: 1300px;">
+								</div>
+							</div>
+	
+								
+	
+</div>
+
+{% endblock %}

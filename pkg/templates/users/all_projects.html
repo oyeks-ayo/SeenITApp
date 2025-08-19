@@ -1,0 +1,185 @@
+{% extends 'format.html' %}
+
+{% block description %}
+<meta name="description" content="Engage with content creators, discover amazing projects, and connect with a vibrant community on seenIT. Share your voice and be seen.">
+{% endblock %}
+
+{% block keywords %}
+<meta name="keywords" content="seenIT, promote work, showcase talent, social networking, personal branding, online portfolio, connect with clients, advertise services, grow business, creative platform">
+{% endblock %}
+
+{% block title %}
+<title>SeenIT Users Project – Engage with content creators, discover amazing projects, and connect with a vibrant community on seenIT. Share your voice and be seen.</title>
+{% endblock %}
+
+{% block style %}
+<style>
+	/* General */
+	body {
+		background-color: #f9fafb;
+		font-family: 'Inter', sans-serif;
+		color: #172436;
+	}
+
+	.bigbody {
+		padding: 20px;
+	}
+
+	/* Profile Section */
+	.profile-header {
+		background-size: cover;
+		background-position: center;
+		border-radius: 20px;
+		overflow: hidden;
+		box-shadow: 0 4px 15px rgba(0,0,0,0.1);
+		margin-bottom: 40px;
+	}
+
+	.profile-pic {
+		width: 220px;
+		height: 220px;
+		border-radius: 50%;
+		object-fit: cover;
+		border: 6px solid #fff;
+		box-shadow: 0 4px 12px rgba(0,0,0,0.2);
+		margin: 20px;
+	}
+
+	.profile-info {
+		background: rgba(255,255,255,0.8);
+		padding: 20px;
+		border-radius: 15px;
+	}
+
+	.profile-info h1 {
+		font-size: 2.2rem;
+		font-weight: 700;
+	}
+
+	.profile-info h2 {
+		font-size: 1.2rem;
+		color: #555;
+	}
+
+	/* Buttons */
+	.btnCol {
+		background-color: #172436;
+		color: ghostwhite;
+		border-radius: 30px;
+		padding: 10px 25px;
+		transition: 0.3s ease;
+	}
+
+	.btnCol:hover {
+		background-color: #007aff;
+		color: #fff;
+		transform: translateY(-2px);
+		box-shadow: 0 4px 10px rgba(0,0,0,0.15);
+	}
+
+	/* Project Card */
+	.project-card {
+		background: #fff;
+		border-radius: 20px;
+		box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+		overflow: hidden;
+		transition: transform 0.3s ease, box-shadow 0.3s ease;
+	}
+
+	.project-card:hover {
+		transform: translateY(-5px);
+		box-shadow: 0 6px 18px rgba(0,0,0,0.15);
+	}
+
+	.media-gallery img,
+	.media-gallery video {
+		width: 100%;
+		max-height: 280px;
+		object-fit: cover;
+		border-bottom: 1px solid #eee;
+	}
+
+	.card-body h2 {
+		font-size: 1rem;
+		color: #888;
+		margin-bottom: 5px;
+	}
+
+	.card-body h3 {
+		font-size: 1.4rem;
+		font-weight: 600;
+		color: #172436;
+	}
+
+	.card-body p {
+		font-size: 0.95rem;
+		color: #555;
+		line-height: 1.6;
+	}
+
+	.card-footer {
+		background: #f9fafb;
+		border-top: none;
+		font-size: 0.85rem;
+		color: #666;
+	}
+</style>
+{% endblock %}
+
+{% block content %}
+<div class="container-fluid bigbody">
+
+	<!-- Profile Section -->
+	<div class="row profile-header" style="background-image: url('/static/uploads/cover_pix/{{ profile.cover_pix if profile.cover_pix else 'avatar.jpg' }}');">
+		<div class="col-md-4 d-flex justify-content-center align-items-center">
+			<img src="/static/uploads/profile_pix/{{ profile.profile_pix if profile.profile_pix else 'avatar.jpg' }}" alt="profile picture" class="profile-pic">
+		</div>
+		<div class="col-md-8 d-flex align-items-center">
+			<div class="profile-info ">
+				<h1>{{user.fname}} {{user.lname}}</h1>
+				<h2>@{{user.username}}</h2>
+				<div class="mt-3">
+					<a class="fw-bold btn btnCol" href="/profile/page/{{user.id}}/">View Profile</a>
+				</div>
+			</div>
+		</div>
+	</div>
+
+	<!-- Projects Section -->
+	{% for p in projects %}
+	<div class="row mb-5">
+		<div class="col-md-10 mx-auto">
+			<div class="project-card">
+				<!-- Media -->
+				<div class="media-gallery">
+					{% for media in p.media %}
+						{% if media.file_type == 'image' %}
+							<img src="/static/uploads/project/project_pix/{{media.filename}}" alt="{{p.title}}">
+						{% elif media.file_type == 'video' %}
+							<video controls>
+								<source src="/static/uploads/project/project_video/{{media.filename}}">
+							</video>
+						{% endif %}
+					{% endfor %}
+				</div>
+
+				<!-- Details -->
+				<div class="card-body p-4">
+					<h2>Project Title</h2>
+					<h3>{{p.title}}</h3>
+					<hr>
+					<h2>Description</h2>
+					<p>{{p.description}}</p>
+					<a class="btn btn-outline-dark mt-2" href="/project/{{p.user.id}}/{{p.title}}/{{p.profile_id}}/">See more...</a>
+				</div>
+
+				<!-- Footer -->
+				<div class="card-footer p-3 text-end">
+					<small>Posted - {{p.datereg_project.strftime('%b %d, %Y at %I:%M %p')}} | {{p.datereg_project|time_ago}}</small>
+				</div>
+			</div>
+		</div>
+	</div>
+	{% endfor %}
+</div>
+{% endblock %}

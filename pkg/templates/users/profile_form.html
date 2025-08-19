@@ -1,0 +1,414 @@
+{% extends 'format.html' %}
+
+	{% block description %}
+	<meta name="description" content="Create your seenIT profile to showcase your talents, promote your work, and connect with individuals or organizations that matter. Get seen today.">
+	{% endblock %}
+			
+	{% block keywords %}
+	<meta name="keywords" content="seenIT, promote work, showcase talent, social networking, personal branding, online portfolio, connect with clients, advertise services, grow business, creative platform">
+	{% endblock %}
+
+	{% block title %}
+	<title>Profile – Promote Your Work & Grow Your Network</title>
+	{% endblock %}
+
+	{% block style %}
+	<style>
+		.bigbody {
+
+			min-height: 800px;
+			
+		}
+		.banner {
+			background-color: rgba(0, 0, 0, 0.3);
+			min-height: 100px;
+		}
+		.nba{color:#4B4B4B;
+			background-color: whitesmoke;
+		}
+
+		.bord {
+			border: 2px solid red;
+			min-height: 100px;
+		}
+
+		.fontOpen {
+			font-family: Open Sans, sans-serif;
+			color:#007aff;
+			font-size: 27px;				
+		}
+
+		.fontPoppins {
+				font-family:Poppins, sans-serif;
+				
+		}
+
+		.fontInter {
+				font-family: 'Inter', sans-serif;
+		}
+	</style>
+	{% endblock %}
+
+{% block content %}
+<!--===================== Profile Creation Starts Here ===========================-->
+
+<!--============================ Row 1 Starts here ===============================-->
+<section>
+<div class="row fontOpen text-light">
+	<div class="col-12 col-md-9">
+		<div class="row">
+			<div class="col banner">
+				<h1>CREATE OR EDIT YOUR PROFILE AND CONNECT WITH A COMMUNITY OF PEOPLE WHO APPRECIATE AND NEED WHAT YOU OFFER</h1>
+			</div>
+		</div>
+		<div class="row">
+			<div class="col">
+<!--============================Carousel starts here==============================-->
+
+							<div id="carouselExampleAutoplaying" class="carousel slide" data-bs-ride="carousel">
+
+							  <div class="carousel-inner">
+								<div class="carousel-item active">
+								  <img src="/static/profile_page_pics/afro.jpg" class="d-block w-100" alt="picture of a fabric seller">
+								</div>
+
+								<div class="carousel-item">
+								  <img src="/static/profile_page_pics/fteacher.jpg" class="d-block w-100 h-75" alt="picture of a female teacher">
+								</div>
+
+
+								<div class="carousel-item">
+								  <img src="/static/profile_page_pics/soup.jpg" class="d-block w-100 h-75" alt="picture of a cooking soup">
+								</div>
+
+								<div class="carousel-item">
+								  <img src="/static/profile_page_pics/grill.jpg" class="d-block w-100 h-50" alt="picture of a grilled meat">
+								</div>
+
+							  </div>
+
+							  <button class="carousel-control-prev" type="button" data-bs-target="#carouselExampleAutoplaying" data-bs-slide="prev">
+								<span class="carousel-control-prev-icon" aria-hidden="true"></span>
+								<span class="visually-hidden">Previous</span>
+							  </button>
+
+							  <button class="carousel-control-next" type="button" data-bs-target="#carouselExampleAutoplaying" data-bs-slide="next">
+								<span class="carousel-control-next-icon" aria-hidden="true"></span>
+								<span class="visually-hidden">Next</span>
+							  </button>
+
+						</div>
+<!--============================ Carousel ends here ==============================-->
+			</div>
+		</div>
+	</div>
+
+	<div class="col-md-3 d-none d-md-block banner">
+		<div class="d-flex">
+			<div class="col-sm-5 hstack whiteLayer rounded ms-auto my-2">
+				<a href="/seenIT/hub/"  class="btn text-light" 
+				style="background-color: #4B4B4B;">seenIT Hub</a>
+			</div>
+			<div class="col-sm-5 hstack whiteLayer rounded ms-auto my-2">
+				<a href="/profile/page/{{user.id}}"  class="btn text-light" 
+				style="background-color: #4B4B4B;">My Page</a>
+			</div>
+		</div>
+		<img class="img-fluid w-100 mt-5" src="/static/profile_page_pics/profile.jpg">
+	</div>
+</div>
+</section>
+<!--============================= Row 1 Ends here ===============================-->
+
+<!--============================ Row 2 Starts here ===============================-->
+<form class="form" action="" method="post" id="updateform" enctype="multipart/form-data">
+	{{form.hidden_tag()}}
+<section>
+<div class="row text-light fontInter justify-content-evenly">
+<!--=========================== Form 1 begins here BASIC INFO ===============================-->
+
+	<div class="col-5 banner mt-5">
+		<div id="info"></div>
+			<h1>Basic Info</h1>
+			<div class="row mt-5">
+				<div class="col-md-6 form-floating">
+						{{form.fname(class_='form-control',id='fname1',placeholder='First Name')}}
+						{{form.fname.label}}
+					
+				</div>
+
+				<div class="col-md-6 form-floating">
+					{{form.lname(class_='form-control', id='lname1', placeholder='Last Name')}}
+					{{form.lname.label}}
+					
+				</div>
+
+				<div class="col-md-6 mt-3 form-floating">
+					{{form.mname(class_='form-control', placeholder='Middle Name (optional)')}}
+					{{form.mname.label}}
+				</div>
+
+				<div class="col-md-6 mt-3 form-floating">
+					{{form.username(class_='form-control',id='uname1', placeholder= 'username')}}
+					{{form.username.label}}
+				</div>
+
+				<div class="col-md-6 mt-3 form-floating">
+					{{form.profile_pix(class_='form-control text-primary', placeholder='Upload your profile picture')}}
+					{{form.profile_pix.label}}
+					
+				</div>
+
+				<div class="col-md-6 mt-3 form-floating">
+					{{form.cover_pix(class_='form-control text-primary', placeholder='Upload your profile picture')}}
+					{{form.cover_pix.label}}
+					<span id="cover"></span>
+				</div>
+
+				<div class="col-md-6 mt-3 form-floating">
+					{{form.dob(class_='form-control', placeholder='Date of birth')}}
+					{{form.dob.label}}
+				</div>
+
+				
+				<div class="col-md-5 mt-3 hv-25 rounded form-floating bg-light">
+					<div>
+						<label class="text-dark">Gender</label><br>
+						<div class="d-flex justify-content-between">
+						<label class="text-dark">Male</label><input type="radio" name="gender" value="Male"><br>
+						<label class="text-dark">Female</label><input type="radio" name="gender" value="Female" class="me-2 text-dark"> Female
+						</div>
+					</div>
+				</div>
+
+				<div class="col-12 mt-3 form-floating">
+					{{form.tagline(class_='form-control', placeholder='Your slogan')}}
+					{{form.tagline.label}}
+				</div>
+			  
+				<div class="col-12 mt-3">
+					{{form.about_me(class_='form-control', placeholder='Bio/About Me', rows='5')}}
+				</div>
+			</div>
+	</div>
+
+<!--============================ Form 1 ends here ================================-->
+
+<!--============================ Form 2 begins here  CONTACT & LOCATION ==============================-->
+
+		<div class="col-md-5 banner mt-5">
+			<h1>Contact & Location</h1>
+			
+				<div class="col-12 form-floating">
+					{{form.phone(class_ = 'form-control',id='phone', placeholder='Phone Number')}}
+					{{form.phone.label}}
+				</div>
+
+				<div class="col-12 mt-3 form-floating">
+					{{form.email(class_ = 'form-control', placeholder='Email', readonly=True)}}
+					{{form.email.label}}
+				</div>
+				
+				<div class="col-12 mt-3 form-floating">
+					{{form.address1(class_ = 'form-control', placeholder='Home Address')}}
+					{{form.address1.label}}
+				</div>
+
+				<div class="col-12 mt-3 form-floating">
+					{{form.address2(class_ = 'form-control', placeholder='Additional address')}}
+					{{form.address2.label}}
+				</div>
+				<div class="col-4 form-group mt-3 form-control">
+					<select name="state" class="form-control">
+						<option value="">Your State of Residence</option>
+						{% for s in state %}
+							<option value="{{ s.id }}">{{ s.name }}</option>
+						{% endfor %}
+					</select>
+				</div>
+
+				<div class="col-12 mt-3 form-floating">
+					{{form.web_blog(class_ = 'form-control', placeholder='URL')}}
+					{{form.web_blog.label}}
+				</div>
+
+				<div class="col-12 mt-3 form-floating">
+					{{form.social_m(class_ = 'form-control', placeholder='URL')}}
+					{{form.social_m.label}}
+				</div>
+
+		</div>
+</section>
+
+
+<!--============================ Form 2 Ends here ================================-->
+
+<!--============================= Row 2 Ends here ================================-->
+
+<!--=========================== Row 3 Starts here ================================-->
+
+<!--========================== Form 3 Starts here ================================-->
+<section>
+			<div class="row mt-5 banner text-light fontInter d-flex">
+					<h1>Work/Services</h1>
+					
+					<div class="col-4 form-group">
+						<label><h3>Select Services:</h3></label><br>
+						{% for service in services %}
+							<input type="checkbox" name="service_type" value="{{ service.id }}"> {{ service.name }}<br>
+						{% endfor %}
+					</div>
+					
+
+					<div class="col-4 form-group">
+						<h3>Select Skills:</h3>
+						
+						
+						<select name="skill_set" class="form-control" multiple style="height: 250px;">
+						
+							{% for skill in skills %}
+								<option value="{{ skill.id }}">{{ skill.name }}</option>
+							{% endfor %}
+						</select>
+					</div>
+
+					<div class="col-4 form-group">
+						<h3>Select Category:</h3>
+						
+						<select name="category" class="form-control">
+							<option value="">Category</option>
+							{% for c in category %}
+								<option value="{{ c.id }}">{{ c.name }}</option>
+							{% endfor %}
+						</select>
+					</div>
+
+			</div>
+<!--============================= Row 3 Ends here ================================-->
+<!--=========================== Form 3 Ends here =================================-->
+
+<!--======================= Update Button Starts here ============================-->
+		<div class="row justify-content-evenly">
+			<div class="col-6 mt-3 mb-5 form-floating">
+				{{form.update(class_ = 'btn btn-warning form-control', id='btn', type='Button')}}
+			</div>
+		</div>
+</section>
+<!--====================== Update Button Ends here ==============================-->
+</form>
+
+<!--===================== Profile Creation Ends Here =============================-->
+
+<script src="/static/jquery-3.7.1.min.js"></script>
+		<script>
+			$(document).ready(function(){
+				$('#btn').click(function(event){
+					event.preventDefault();
+
+					var user_id = '{{user.id}}';
+					var form_data = new FormData($('#updateform')[0]);
+					
+					$.ajax({
+						url:'/profileform/update/' + user_id + '/',
+						type:'POST',
+						data: form_data,
+						cache: false,
+						contentType: false,
+						processData:false,
+						// dataType: 'json',
+						error:function(rsp){
+							console.log(rsp)
+							$('#info').addClass('alert alert-danger').html("An error occurred. Try again.").fadeIn();
+						},
+
+						success: function(rsp){
+							$('.info').removeClass('alert alert-danger alert-success').fadeOut(1000)
+							$('#fname1').click(function () {
+								$(this).removeClass('is-invalid')
+							})
+
+							if (rsp.status == 'danger') {
+								$('#info').addClass('alert alert-danger mt-2').fadeIn(8000);
+								$('#info').html(rsp.msg).fadeIn(8000)
+								$('#fname1').addClass('is-invalid')
+						
+							}else if (rsp.status == 'loggedout'){
+								document.location.href = rsp.msg
+
+							}else if (rsp.status == 'phone'){
+								$('#info').addClass('alert alert-danger mt-2').fadeIn(8000);
+								$('#info').html(rsp.msg).fadeIn(8000)
+								$('#phone1').addClass('is-invalid')
+
+							}else if (rsp.status == 'coverpix'){
+								$('#info').addClass('alert alert-danger mt-2').fadeIn(8000);
+								$('#info').html(rsp.msg).fadeIn(8000)
+								
+							}else if (rsp.status == 'profilepix'){
+								$('#info').addClass('alert alert-danger mt-2').fadeIn(8000);
+								$('#info').html(rsp.msg).fadeIn(8000)
+								
+							}else if (rsp.status == 'existingname'){
+								$('#info').addClass('alert alert-danger mt-2').fadeIn(8000);
+								$('#info').html(rsp.msg).fadeIn(8000)
+								$('#uname1').addClass('is-invalid')
+
+							}else if (rsp.status == 'gender'){
+								$('#info').addClass('alert alert-danger mt-2').fadeIn(8000);
+								$('#info').html(rsp.msg).fadeIn(8000)
+
+							}else if (rsp.status == 'no_phone'){
+								$('#info').addClass('alert alert-danger mt-2').fadeIn(8000);
+								$('#info').html(rsp.msg).fadeIn(8000)
+								$('#phone').addClass('is-invalid')
+
+							}else if (rsp.status == 'category'){
+								$('#info').addClass('alert alert-danger mt-2').fadeIn(8000);
+								$('#info').html(rsp.msg).fadeIn(8000)
+
+							}else if (rsp.status == 'noname'){
+								$('#info').addClass('alert alert-danger mt-2').fadeIn(8000);
+								$('#info').html(rsp.msg).fadeIn(8000)
+								$('#uname1').addClass('is-invalid')
+
+							}else if (rsp.status == 'state'){
+								$('#info').addClass('alert alert-danger mt-2').fadeIn(8000);
+								$('#info').html(rsp.msg).fadeIn(8000)
+
+							}else if (rsp.status == 'success'){
+								$('#info').addClass('alert alert-success mt-2').fadeIn(8000);
+								$('#info').html(rsp.msg).fadeIn(8000)
+								$('.form-control').val('')
+								
+							}else {
+							
+							$('#info').addClass('alert alert-danger mt-2');
+							$('#info').html(rsp.msg);
+							}
+
+							
+						},
+
+						beforeSend: function(){
+							$('#info').html('<div class = "spinner-border text-warning ><span>Signing You Up. . .</span></div>')
+						},
+						complete: function() {
+							
+							if ($('#info').hasClass('alert-success')) {
+								$('#btn').html('Welcome to SeenIT');
+							}
+							else if ($('#info').hasClass('alert-danger')) {
+								$('#btn').html('Try Again');
+							}
+							else {
+								$('#btn').html('Update Profile');
+							}
+						}
+					})
+				})
+			})
+		</script>
+
+{% endblock %}
+
+<!--========================= Container Ends Here ==============================-->

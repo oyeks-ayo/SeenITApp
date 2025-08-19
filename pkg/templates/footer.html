@@ -1,0 +1,120 @@
+<style>
+    /* General Footer Styling */
+    footer {
+        background: linear-gradient(135deg, #172436, #1c2e46);
+        color: #f5f5f5;
+        padding: 40px 20px 20px;
+        border-top: 5px solid #ffc107;
+        font-family: 'Poppins', sans-serif;
+    }
+    
+    footer h5 {
+        font-weight: 600;
+        margin-bottom: 15px;
+        color: #ffc107;
+    }
+    
+    footer p {
+        font-size: 14px;
+        line-height: 1.6;
+        color: #dcdcdc;
+    }
+    
+    footer ul {
+        padding: 0;
+        margin: 0;
+        list-style: none;
+    }
+    
+    footer ul li {
+        margin: 8px 0;
+    }
+    
+    footer a.remove {
+        text-decoration: none;
+        color: #e0e0e0;
+        transition: all 0.3s ease;
+    }
+    
+    footer a.remove:hover {
+        color: #ffc107;
+        text-decoration: underline;
+        transform: translateX(5px);
+    }
+    
+    /* Socials */
+    footer .socials a {
+        display: inline-block;
+        margin: 0 10px;
+        font-size: 18px;
+        color: #f5f5f5;
+        transition: color 0.3s ease, transform 0.3s ease;
+    }
+    
+    footer .socials a:hover {
+        color: #ffc107;
+        transform: scale(1.1);
+    }
+    
+    /* Bottom Section */
+    footer .bottom-bar {
+        margin-top: 30px;
+        padding-top: 15px;
+        border-top: 1px solid #444;
+        text-align: center;
+        font-size: 14px;
+        color: #aaa;
+    }
+    </style>
+    
+    
+    <!--==================== Footer Starts Here ==============================-->
+    <footer>
+        <div class="row justify-content-evenly text-start">
+    
+            <div class="col-md-3 mb-4">
+                <h5><a href="{{url_for('about_us')}}" class="badge text-bg-warning p-2">About Us</a></h5>
+                <p><span class="badge text-bg-primary">seenIT</span> is a social platform built to help individuals 
+                    and organizations showcase their work, grow their audience, 
+                    and connect with the right people. Whether you are a creator, brand, or business 
+                    — your talent deserves to be seen.</p>
+            </div>
+    
+            <div class="col-md-2 mb-4">
+                <h5 class="badge text-bg-warning p-2">Quick Links</h5>
+                <ul>
+                    <li><a class="remove" href="{{url_for('home')}}">Homepage</a></li>
+                    <li><a class="remove" href="{{url_for('contact')}}">Contact Us</a></li>
+                    <li><a class="remove" href="{{url_for('userLogin')}}">seenIT Hub</a></li>
+                    <li><a class="remove" href="#">My Profile</a></li>
+                </ul>
+            </div>
+    
+            <div class="col-md-3 mb-4">
+                <h5 class="badge text-bg-warning p-2">Connect With Us</h5>
+                <p>📬 Subscribe to Updates - Get tips, new opportunities, and inspiring stories delivered monthly.</p>
+                <div class="socials">
+                    🌐 
+                    <a href="#">LinkedIn</a> | 
+                    <a href="#">Facebook</a> | 
+                    <a href="#">Instagram</a> | 
+                    <a href="#">X</a>
+                </div>
+            </div>
+    
+            <div class="col-md-2 mb-4">
+                <h5 class="badge text-bg-warning p-2">Legal</h5>
+                <ul>
+                    <li><a class="remove" href="#">Terms of Use</a></li>
+                    <li><a class="remove" href="#">Privacy Policy</a></li>
+                    <li><a class="remove" href="#">Cookies</a></li>
+                </ul>
+            </div>
+        </div>
+    
+        <div class="bottom-bar">
+            © 2025 SeenIT Hub. All rights reserved
+        </div>
+    </footer>
+    <!--==================== Footer Ends Here ==============================-->
+    

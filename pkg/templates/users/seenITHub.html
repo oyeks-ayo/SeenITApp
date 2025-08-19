@@ -1,0 +1,303 @@
+{% extends 'format.html' %}
+
+{% block description %}
+<meta name="description" content="Engage with content creators, discover amazing projects, and connect with a vibrant community on seenIT. Share your voice and be seen.">
+{% endblock %}
+            
+{% block keywords %}
+<meta name="keywords" content="seenIT, promote work, showcase talent, social networking, personal branding, online portfolio, connect with clients, advertise services, grow business, creative platform">
+{% endblock %}
+
+{% block title %}
+<title>SeenIT Hub – Engage with creators, discover projects, and connect with the community</title>
+{% endblock %}
+
+{% block style %}
+<style>
+    :root {
+        --primary: #4361ee;
+        --secondary: #3a0ca3;
+        --accent: #f72585;
+        --light: #f8f9fa;
+        --dark: #212529;
+        --success: #4cc9f0;
+    }
+
+    body {
+        background-color: #f5f7fa;
+    }
+
+    .bigbody {
+        min-height: 800px;
+    }
+
+    /* Banner */
+    .banner {
+        background: linear-gradient(135deg, var(--primary), var(--secondary));
+        min-height: 300px;
+        color: white;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        text-align: center;
+    }
+
+    .banner h1 {
+        font-weight: 700;
+        font-size: 2.5rem;
+        letter-spacing: 1px;
+    }
+
+    /* Profile Section */
+    .profile-cover {
+        background-size: cover;
+        background-position: center;
+        min-height: 280px;
+        border-radius: 12px;
+        box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+        position: relative;
+    }
+
+    .profile-cover img {
+        position: absolute;
+        bottom: -60px;
+        left: 30px;
+        width: 120px;
+        height: 120px;
+        border-radius: 50%;
+        border: 4px solid white;
+        box-shadow: 0 4px 8px rgba(0,0,0,0.15);
+        object-fit: cover;
+    }
+
+    .user-card {
+        border-radius: 12px;
+        background: white;
+        box-shadow: 0 4px 10px rgba(0,0,0,0.05);
+        transition: transform 0.3s;
+    }
+
+    .user-card:hover {
+        transform: translateY(-5px);
+    }
+
+    .skill-badge {
+        background: var(--primary);
+        color: white;
+        padding: 4px 12px;
+        border-radius: 30px;
+        font-size: 0.85rem;
+    }
+
+    /* Form */
+    #projectform {
+        padding: 20px;
+    }
+
+    #projectform h4 {
+        font-weight: 600;
+        margin-bottom: 15px;
+    }
+
+    #projectform .form-control {
+        border-radius: 10px;
+    }
+
+    #btn {
+        border-radius: 10px;
+        font-weight: 600;
+        transition: background 0.3s ease;
+    }
+
+    #btn:hover {
+        background-color: #e0a800;
+    }
+
+    /* Projects */
+    .card.project-card {
+        border: none;
+        border-radius: 12px;
+        overflow: hidden;
+        transition: transform 0.3s ease, box-shadow 0.3s ease;
+    }
+
+    .card.project-card:hover {
+        transform: translateY(-6px);
+        box-shadow: 0 8px 20px rgba(0,0,0,0.12);
+    }
+
+    .project-header {
+        height: 180px;
+        background-size: cover;
+        background-position: center;
+        position: relative;
+    }
+
+    .project-header img {
+        position: absolute;
+        bottom: -35px;
+        left: 20px;
+        width: 70px;
+        height: 70px;
+        border-radius: 50%;
+        border: 3px solid white;
+        object-fit: cover;
+    }
+
+    .project-body {
+        padding-top: 45px;
+    }
+
+    .media-item {
+        border-radius: 8px;
+        max-height: 250px;
+        object-fit: cover;
+        width: 100%;
+        box-shadow: 0 2px 6px rgba(0,0,0,0.1);
+    }
+
+    .btn-accent {
+        background: var(--accent);
+        border-radius: 30px;
+        padding: 8px 20px;
+        font-weight: 600;
+    }
+
+    .btn-accent:hover {
+        background: #d91a6d;
+    }
+
+    /* Section titles */
+    h3.section-title {
+        font-weight: 600;
+        margin-bottom: 30px;
+        text-align: center;
+    }
+</style>
+{% endblock %}
+
+{% block content %}
+<div class="bigbody fontInter mt-2">
+
+    <!-- Banner -->
+    <div class="banner">
+        <h1>SeenIT Hub</h1>
+    </div>
+
+    <!-- Profile Section -->
+    <div class="container mt-5">
+        <div class="profile-cover" style="background-image: url('/static/uploads/cover_pix/{{ user.profile.cover_pix if user.profile.cover_pix else 'avatar.jpg' }}');">
+            <img src="/static/uploads/profile_pix/{{ user.profile.profile_pix if user.profile.profile_pix else 'avatar.jpg' }}" alt="profile picture">
+        </div>
+
+        <div class="row mt-5">
+            <div class="col-md-4">
+                <div class="user-card p-4 text-center">
+                    <p class="text-muted">@{{ user.username }}</p>
+                    {% if user.profile.category %}
+                        <span class="skill-badge">{{ user.profile.category.name }}</span>
+                    {% endif %}
+                    <p class="mt-2">{{ user.profile.bio | default('No bio available') }}</p>
+                </div>
+            </div>
+
+            <div class="col-md-8">
+                <div class="user-card p-4">
+                    <h2><a href="/profile/page/{{user.id}}" class="text-dark">{{user.fname}} {{user.lname}}</a></h2>
+                    <p class="text-muted">Let the world see what you've created.</p>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Project Form -->
+    <div class="container mt-5">
+        <div class="card shadow-sm">
+            <div class="card-body">
+                <form id="projectform" method="post" enctype="multipart/form-data">
+                    {{ form.csrf_token }} {{form.hidden_tag()}}
+                    <div id="info"></div>
+
+                    <h4>Share Your Project</h4>
+                    <p class="text-muted">Tell your story — describe your work, and upload pictures or videos.</p>
+
+                    <div class="mb-3">
+                        {{ form.title.label(class_="form-label fw-bold") }}
+                        {{ form.title(class_="form-control", placeholder="Your Project title") }}
+                    </div>
+
+                    <div class="mb-3">
+                        {{ form.description.label(class_="form-label fw-bold") }}
+                        {{ form.description(class_="form-control", rows="4", placeholder="Describe your project...") }}
+                    </div>
+
+                    <div class="mb-3">
+                        {{ form.projects.label(class_="form-label fw-bold") }}
+                        {{ form.projects(class_="form-control") }}
+                        <small class="text-muted">Allowed: Images [jpg,jpeg,png,webp,gif] and Videos [mp4,mov,webm]</small>
+                    </div>
+
+                    <div class="d-grid">
+                        {{ form.upload(class_="btn btn-warning", id='btn') }}
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+
+    <!-- Community Projects -->
+    <div class="container mt-5">
+        <h3 class="section-title">Discover What Others Are Creating</h3>
+        <div class="row">
+            {% for p in projects %}
+            <div class="col-md-4 mb-4">
+                <div class="card project-card">
+                    <div class="project-header" style="background-image: url('/static/uploads/cover_pix/{{ p.owner.cover_pix | default('avatar.jpg') }}');">
+                        <img src="/static/uploads/profile_pix/{{ p.owner.profile_pix | default('avatar.jpg') }}">
+                    </div>
+                    <div class="card-body project-body">
+                        <h5><a href="/profile/page/{{ p.user.id }}" class="text-dark">{{ p.user.fname }} {{ p.user.lname }}</a></h5>
+                        <small class="text-muted">@{{ p.user.username }}</small><br>
+                        {% if p.owner.category %}
+                            <span class="badge bg-primary mt-2">{{ p.owner.category.name }}</span>
+                        {% endif %}
+
+                        <div class="mt-3">
+                            <h6 class="fw-bold">Title: {{ p.title }}</h6>
+                            <p class="text-muted">{{ p.description | truncate(100) }}...</p>
+                        </div>
+
+                        <div class="media-group">
+                            {% for media in p.media %}
+                                {% if media.file_type == 'image' %}
+                                    <img src="/static/uploads/project/project_pix/{{ media.filename }}" class="media-item">
+                                {% elif media.file_type == 'video' %}
+                                    <video controls class="media-item">
+                                        <source src="/static/uploads/project/project_video/{{ media.filename }}" type="video/mp4">
+                                    </video>
+                                {% endif %}
+                            {% endfor %}
+                        </div>
+                        <p class="text-muted mt-2"><small>Posted {{ p.datereg_project|time_ago }}</small></p>
+
+                        <div class="d-flex justify-content-between align-items-center mt-3">
+                            <div>
+                                <button class="btn btn-sm btn-outline-primary"><i class="far fa-heart"></i></button>
+                                <button class="btn btn-sm btn-outline-secondary"><i class="far fa-comment"></i></button>
+                            </div>
+                            <a class="btn btn-warning btn-sm" href="/project/{{p.user.id}}/{{p.title}}/{{p.profile_id}}/">See more</a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            {% else %}
+            <div class="col-12 text-center py-5">
+                <i class="fas fa-users fa-3x text-muted mb-3"></i>
+                <h4 class="text-muted">No projects found</h4>
+                <p>Be the first to share your work!</p>
+            </div>
+            {% endfor %}
+        </div>
+    </div>
+</div>
+{% endblock %}
