@@ -9,7 +9,7 @@
 {% endblock %}
 
 {% block title %}
-<title>SeenIT Hub – Engage with content creators, discover amazing projects, and connect with a vibrant community on seenIT. Share your voice and be seen.</title>
+<title>Search Results – SeenIT Hub</title>
 {% endblock %}
 
 {% block style %}
@@ -21,346 +21,441 @@
         --light: #f8f9fa;    /* Off-white */
         --dark: #212529;     /* Dark gray */
         --success: #4cc9f0;  /* Teal */
+        --gray-100: #f8f9fa;
+        --gray-200: #e9ecef;
+        --gray-300: #dee2e6;
+        --gray-800: #343a40;
     }
 
-    .bigbody {
-        min-height: 800px;
+    body {
         background-color: #f5f7fa;
-    }
-
-    .banner {
-        background: linear-gradient(135deg, var(--primary) 0%, var(--secondary) 100%);
-        min-height: 400px;
-        color: white;
-        box-shadow: 0 4px 6px rgba(0,0,0,0.1);
-    }
-
-    .banner2 {
-        background-color: rgba(170, 170, 170, 0.9);
-    }
-
-    .banner3 {
-        background-color: white;
-        color: var(--dark);
-        border-radius: 8px;
-        box-shadow: 0 2px 4px rgba(0,0,0,0.05);
-    }
-
-    .nba {
-        color: #4B4B4B;
-    }
-
-    .bord {
-        min-height: 100px;
-    }
-
-    div {
-        min-height: 50px;
-    }
-
-    .fontOpen {
-        font-family: 'Open Sans', sans-serif;
-        color: var(--primary);
-        font-size: 27px;                
-    }
-
-    .fontPoppins {
-        font-family: 'Poppins', sans-serif;
-    }
-
-    .fontInter {
         font-family: 'Inter', sans-serif;
-        color: ghostwhite;
-    }
-
-    .content1 {
-        text-decoration: none;
         color: var(--dark);
-        transition: color 0.3s ease;
     }
 
-    .content1:hover {
-        color: var(--accent);
-        text-decoration: none;
+    .page-header {
+        background: linear-gradient(135deg, var(--primary) 0%, var(--secondary) 100%);
+        color: white;
+        padding: 1.5rem 0;
+        margin-bottom: 2rem;
+        border-radius: 0 0 12px 12px;
+        box-shadow: 0 4px 12px rgba(0,0,0,0.1);
     }
 
-    .content2 {
-        text-decoration: none;
-        background-color: rgba(0, 0, 0, 0.3);
-        color: ghostwhite;
+    .search-results-container {
+        background: white;
+        border-radius: 12px;
+        box-shadow: 0 2px 20px rgba(0,0,0,0.08);
+        padding: 2rem;
+        margin-bottom: 2rem;
     }
 
-    li a {
-        text-decoration: none;
-        color: ghostwhite;
-    }
-
-    /* Enhanced Components */
-    .video-container {
-        border-radius: 8px;
-        overflow: hidden;
-        box-shadow: 0 4px 6px rgba(0,0,0,0.1);
-        background-color: var(--dark);
+    .results-header {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
         margin-bottom: 1.5rem;
+        padding-bottom: 1rem;
+        border-bottom: 1px solid var(--gray-200);
     }
 
-    .video-container video {
-        width: 100%;
-        display: block;
+    .result-count {
+        font-weight: 600;
+        color: var(--gray-800);
     }
 
     .user-card {
         background: white;
-        border-radius: 10px;
+        border-radius: 12px;
         overflow: hidden;
-        box-shadow: 0 4px 6px rgba(0,0,0,0.1);
-        transition: transform 0.3s ease, box-shadow 0.3s ease;
+        box-shadow: 0 4px 12px rgba(0,0,0,0.06);
+        transition: all 0.3s ease;
         margin-bottom: 2rem;
+        border: 1px solid var(--gray-200);
     }
 
     .user-card:hover {
         transform: translateY(-5px);
-        box-shadow: 0 10px 15px rgba(0,0,0,0.1);
+        box-shadow: 0 10px 25px rgba(0,0,0,0.1);
     }
 
-    .profile-img {
+    .user-header {
+        position: relative;
+        height: 120px;
+        background-size: cover;
+        background-position: center;
+    }
+
+    .user-avatar {
+        position: absolute;
+        bottom: -40px;
+        left: 20px;
         width: 80px;
         height: 80px;
+        border-radius: 50%;
+        border: 4px solid white;
+        box-shadow: 0 4px 10px rgba(0,0,0,0.1);
+        background: white;
         object-fit: cover;
-        border: 3px solid white;
-        box-shadow: 0 2px 4px rgba(0,0,0,0.1);
     }
 
-    .skill-badge {
-        background-color: var(--primary);
+    .user-info {
+        padding: 50px 20px 20px 20px;
+    }
+
+    .user-name {
+        font-weight: 700;
+        margin-bottom: 0.25rem;
+        color: var(--dark);
+        text-decoration: none;
+    }
+
+    .user-name:hover {
+        color: var(--primary);
+    }
+
+    .username {
+        color: var(--gray-600);
+        margin-bottom: 0.5rem;
+        font-size: 0.9rem;
+    }
+
+    .category-badge {
+        background: var(--primary);
         color: white;
-        padding: 0.25rem 0.75rem;
+        padding: 0.35rem 0.75rem;
         border-radius: 50px;
         font-size: 0.8rem;
-        margin-right: 0.5rem;
-        margin-bottom: 0.5rem;
+        font-weight: 500;
         display: inline-block;
-    }
-
-    .btn-accent {
-        background-color: var(--accent);
-        color: white;
-        border: none;
-    }
-
-    .btn-accent:hover {
-        background-color: #d91a6d;
-        color: white;
+        margin-bottom: 1rem;
     }
 
     .project-card {
-  border: 1px solid #ddd;
-  border-radius: 8px;
-  padding: 20px;
-  margin-bottom: 30px;
-  background: white;
-  box-shadow: 0 2px 4px rgba(0,0,0,0.1);
-}
+        border: 1px solid var(--gray-200);
+        border-radius: 10px;
+        padding: 1.25rem;
+        margin-bottom: 1.5rem;
+        background: var(--gray-100);
+        transition: all 0.2s ease;
+    }
 
-.media-group {
-  display: flex;
-  flex-wrap: wrap;
-  gap: 10px;
-  margin-top: 15px;
-}
+    .project-card:hover {
+        background: white;
+        box-shadow: 0 4px 12px rgba(0,0,0,0.08);
+    }
 
-.media-item {
-  max-height: 200px;
-  max-width: 100%;
-  border-radius: 4px;
-  object-fit: cover;
-}
+    .project-title {
+        font-weight: 600;
+        color: var(--dark);
+        margin-bottom: 0.5rem;
+    }
 
+    .project-description {
+        color: var(--gray-800);
+        margin-bottom: 1rem;
+        line-height: 1.5;
+    }
 
-.media-item video {
-  background: black;  
-}
+    .media-grid {
+        display: grid;
+        grid-template-columns: repeat(auto-fill, minmax(150px, 1fr));
+        gap: 0.75rem;
+        margin-bottom: 1rem;
+    }
+
+    .media-item {
+        border-radius: 8px;
+        overflow: hidden;
+        height: 150px;
+        background: var(--dark);
+        display: flex;
+        align-items: center;
+        justify-content: center;
+    }
+
+    .media-item img {
+        width: 100%;
+        height: 100%;
+        object-fit: cover;
+    }
+
+    .media-item video {
+        width: 100%;
+        height: 100%;
+        object-fit: cover;
+    }
+
+    .project-actions {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+    }
+
+    .action-buttons button {
+        background: none;
+        border: none;
+        color: var(--gray-600);
+        margin-right: 1rem;
+        transition: color 0.2s;
+    }
+
+    .action-buttons button:hover {
+        color: var(--primary);
+    }
+
+    .see-more-btn {
+        background: linear-gradient(135deg, var(--primary) 0%, var(--secondary) 100%);
+        color: white;
+        border: none;
+        padding: 0.5rem 1.25rem;
+        border-radius: 6px;
+        font-weight: 500;
+        transition: all 0.3s ease;
+    }
+
+    .see-more-btn:hover {
+        transform: translateY(-2px);
+        box-shadow: 0 4px 12px rgba(67, 97, 238, 0.3);
+        color: white;
+    }
+
+    .no-results {
+        text-align: center;
+        padding: 3rem;
+        background: white;
+        border-radius: 12px;
+        box-shadow: 0 2px 20px rgba(0,0,0,0.08);
+    }
+
+    .no-results i {
+        font-size: 4rem;
+        color: var(--gray-300);
+        margin-bottom: 1.5rem;
+    }
+
+    .no-results h4 {
+        color: var(--gray-700);
+        margin-bottom: 1rem;
+    }
+
+    .no-results p {
+        color: var(--gray-600);
+        margin-bottom: 1.5rem;
+    }
+
+    .hub-btn {
+        background: #4B4B4B;
+        color: white;
+        border: none;
+        padding: 0.75rem 1.5rem;
+        border-radius: 8px;
+        font-weight: 500;
+        transition: all 0.3s ease;
+        text-decoration: none;
+        display: inline-block;
+        text-align: center;
+    }
+
+    .hub-btn:hover {
+        background: #3a3a3a;
+        color: white;
+        transform: translateY(-2px);
+        box-shadow: 0 4px 12px rgba(0,0,0,0.15);
+    }
+
+    .back-to-top {
+        position: fixed;
+        bottom: 20px;
+        right: 20px;
+        background: var(--primary);
+        color: white;
+        width: 50px;
+        height: 50px;
+        border-radius: 50%;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        text-decoration: none;
+        box-shadow: 0 4px 12px rgba(67, 97, 238, 0.3);
+        opacity: 0;
+        transition: all 0.3s ease;
+        z-index: 1000;
+    }
+
+    .back-to-top.visible {
+        opacity: 1;
+    }
+
+    @media (max-width: 768px) {
+        .media-grid {
+            grid-template-columns: repeat(auto-fill, minmax(120px, 1fr));
+        }
+        
+        .media-item {
+            height: 120px;
+        }
+        
+        .user-header {
+            height: 100px;
+        }
+        
+        .user-avatar {
+            width: 70px;
+            height: 70px;
+            bottom: -35px;
+        }
+        
+        .user-info {
+            padding: 45px 15px 15px 15px;
+        }
+    }
 </style>
 {% endblock %}
 
 {% block content %}
 <div class="bigbody fontInter">
-    <!-- seenIT Hub Header -->
-    <div class="d-flex align-items-center banner3 justify-content-center" style="color: #4B4B4B; font-family: 'Inter'; height: 70px;">
-        <h1>seenIT Hub</h1>
-    </div>
-
-    <!-- Cover & Profile Section -->
-
-
-    <div class="row banner align-items-center mx-1" 
-        style="background-image: url('/static/uploads/cover_pix/{{ user.profile.cover_pix if user.profile.cover_pix else 'avatar.jpg' }}'); 
-									background-size: cover; 
-									background-repeat: no-repeat;">
-		<div class="col">
-			<img class="img-fluid rounded-circle" src = "/static/uploads/profile_pix/{{ user.profile.profile_pix if user.profile.profile_pix else 'avatar.jpg' }}" alt="profile picture" id="profilpicture" 
-										style="width: 400px; height: 380px;">
-		</div>
-	</div>
-
-    <!-- User Info Section -->
-    <div class="row align-items-center justify-content-between mt-4">
-        <div class="col-sm-7 p-4" style="background-color: white; border-radius: 8px; box-shadow: 0 2px 4px rgba(0,0,0,0.1);">
-            <h2><a class="text-dark" href="/profile/page/{{user.id}}">{{user.fname}} {{user.lname}}</a></h2>
-            <p class="text-muted">Your search...</p>
-        </div>
-        <div class="col-sm-3 mb-4 rounded">
-            <a href="{{url_for('seenITHub')}}"  class="btn text-light form-control" 
-            style="background-color: #4B4B4B;">seenIT Hub</a>
+    <!-- Page Header -->
+    <div class="page-header text-center">
+        <div class="container">
+            <h1 class="mb-3">Search Results</h1>
+            <p class="lead mb-0">Discover amazing creators and their projects</p>
         </div>
     </div>
 
-    <!-- Project Form Section -->
-    <!-- Community Projects Section -->
-    <div class="container mt-5 ">
-        
-    <!-- *************************************************************************************** -->
-    <!-- ****************** WORKING *********************** -->
-    <div class="row justify-content-center m-4">
-        {% for user in users %}
-        {% for pro in user.projects %}
-            <div class="col-4 mb-4">
-                <div class="card fontInter shadow-sm rounded" style="background-color: whitesmoke; color: rgb(65, 65, 59);">
-                    <!-- Header with cover/profile -->
-                    <div class="position-relative" style="background-image: url('/static/uploads/cover_pix/{{ user.profile.cover_pix | default('avatar.jpg') }}'); height: 200px; background-size: cover; background-position: center;">
-                        <div class="position-absolute" style="bottom: -50px; left: 20px;">
-                            <img src="/static/uploads/profile_pix/{{ user.profile.profile_pix | default('avatar.jpg') }}" 
-                                 class="rounded-circle border border-light" style="width: 80px; height: 80px; object-fit: cover;">
-                        </div>
+    <div class="container">
+        <!-- User Info Section -->
+        <div class="row align-items-center justify-content-between mb-4">
+            <div class="col-md-8">
+                <div class="search-results-container">
+                    <div class="results-header">
+                        <h2 class="mb-0">Your Search Results</h2>
+                        <span class="result-count">{{ users|length }} users found</span>
                     </div>
-                    <div class="card-body pt-5">
-                        <h4 class="card-title mb-1">
-                            <a href="/profile/page/{{ user.id }}" class="text-dark">{{ user.fname }} {{ user.lname }}</a>
-                        </h4>
-                        <a class="text-muted mb-2" href="/profile/page/{{ user.id }}">@{{ user.username }}</a> <br>
+                    <p class="text-muted mb-0">Explore the creative work from our community members</p>
+                </div>
+            </div>
+            <div class="col-md-3 text-md-end mt-3 mt-md-0">
+                <a href="{{url_for('seenITHub')}}" class="hub-btn w-100">
+                    <i class="fas fa-arrow-left me-2"></i>Back to Hub
+                </a>
+            </div>
+        </div>
+
+        <!-- Search Results -->
+        <div class="row">
+            {% for user in users %}
+            <div class="col-12 mb-4">
+                <div class="user-card">
+                    <!-- User Header with Cover -->
+                    <div class="user-header" style="background-image: url('/static/uploads/cover_pix/{{ user.profile.cover_pix if user.profile.cover_pix else 'default-cover.jpg' }}');">
+                        <img src="/static/uploads/profile_pix/{{ user.profile.profile_pix if user.profile.profile_pix else 'avatar.jpg' }}" 
+                             class="user-avatar" alt="{{ user.fname }} {{ user.lname }}">
+                    </div>
+                    
+                    <div class="user-info">
+                        <a href="/profile/page/{{ user.id }}" class="user-name h4">{{ user.fname }} {{ user.lname }}</a>
+                        <div class="username">@{{ user.username }}</div>
+                        
                         {% if user.profile.category %}
-                            <span class="badge bg-primary mb-3">{{ user.profile.category.name }}</span>
+                        <span class="category-badge">{{ user.profile.category.name }}</span>
                         {% endif %}
                         
-                        <!-- Project Details -->
-                        <div class="projects-section">
-                            <div class="project-item mb-4 border-bottom pb-3">
-                                <h5 class="text-muted">Title: {{ pro.title }}</h5>
-                                <p class="text-muted">Description: {{ pro.description | truncate(150) }}...</p>
-                                <hr>
-                                <div class="media-group">
+                        <!-- User Projects -->
+                        <div class="user-projects">
+                            {% for pro in user.projects %}
+                            <div class="project-card">
+                                <h5 class="project-title">{{ pro.title }}</h5>
+                                <p class="project-description">{{ pro.description | truncate(150) }}</p>
+                                
+                                {% if pro.media %}
+                                <div class="media-grid">
                                     {% for media in pro.media %}
+                                    <div class="media-item">
                                         {% if media.file_type == 'image' %}
-                                            <div class="modal-dialog modal-dialog-centered modal-dialog-scrollable">
-                                                <img src="/static/uploads/project/project_pix/{{ media.filename }}" 
-                                                     class="img-fluid media-item rounded mb-3" alt="{{ pro.title }}" 
-                                                     style="max-height: 550px; width: 100%; object-fit: cover;">
-                                            </div>
+                                        <img src="/static/uploads/project/project_pix/{{ media.filename }}" 
+                                             alt="{{ pro.title }}" class="img-fluid">
                                         {% elif media.file_type == 'video' %}
-                                            <div class="video-container ratio ratio-16x9 mb-3">
-                                                <video controls class="rounded media-item">
-                                                    <source src="/static/uploads/project/project_video/{{ media.filename }}" type="video/mp4">
-                                                </video>
-                                            </div>
+                                        <video controls>
+                                            <source src="/static/uploads/project/project_video/{{ media.filename }}" type="video/mp4">
+                                        </video>
                                         {% endif %}
+                                    </div>
                                     {% endfor %}
                                 </div>
-                                <div class="d-flex justify-content-between align-items-center">
-                                    <small class="text-muted"></small>
-                                    <div>
-                                        <button class="btn btn-sm btn-outline-primary me-2"><i class="far fa-heart"></i></button>
-                                        <button class="btn btn-sm btn-outline-secondary"><i class="far fa-comment"></i></button>
+                                {% endif %}
+                                
+                                <div class="project-actions">
+                                    <div class="action-buttons">
+                                        <button type="button" class="like-btn">
+                                            <i class="far fa-heart me-1"></i> Like
+                                        </button>
+                                        <button type="button" class="comment-btn">
+                                            <i class="far fa-comment me-1"></i> Comment
+                                        </button>
                                     </div>
-                                </div>
-                                <div>
-                                    <a class="btn btn-warning" href="/project/{{ user.id }}/{{ pro.title }}/{{ user.profile.id }}/">See more</a>
+                                    <a class="see-more-btn" href="/project/{{ user.id }}/{{ pro.title }}/{{ user.profile.id }}/">
+                                        See More <i class="fas fa-arrow-right ms-1"></i>
+                                    </a>
                                 </div>
                             </div>
+                            {% else %}
+                            <div class="project-card text-center py-4">
+                                <i class="fas fa-folder-open fa-2x text-muted mb-3"></i>
+                                <p class="text-muted mb-0">{{ user.fname }} hasn't shared any projects yet</p>
+                            </div>
+                            {% endfor %}
                         </div>
                     </div>
                 </div>
             </div>
-        {% else %}
+            {% else %}
             <div class="col-12">
-                <div class="text-center py-5">
-                    <i class="fas fa-users fa-3x text-muted mb-3"></i>
-                    <h4 class="text-muted">No projects found for {{ user.fname }} {{ user.lname }}</h4>
-                    <p>Encourage them to share their work!</p>
+                <div class="no-results">
+                    <i class="fas fa-search"></i>
+                    <h4>No users found</h4>
+                    <p>Try a different search term or browse all creators in the Hub</p>
+                    <a href="{{url_for('seenITHub')}}" class="hub-btn">
+                        <i class="fas fa-users me-2"></i>Explore seenIT Hub
+                    </a>
                 </div>
             </div>
-        {% endfor %}
-    {% else %}
-        <div class="col-12">
-            <div class="text-center py-5">
-                <i class="fas fa-users fa-3x text-muted mb-3"></i>
-                <h4 class="text-muted">No users found</h4>
-                <p>Try a different search term!</p>
-            </div>
+            {% endfor %}
         </div>
-    {% endfor %}
     </div>
-    <!-- ***************************************************************************************  -->
-    </div>
+
+    <!-- Back to Top Button -->
+    <a href="#" class="back-to-top">
+        <i class="fas fa-arrow-up"></i>
+    </a>
 </div>
-                
-   
-<!-- *************************************************** -->
  
 <script src="/static/jquery-3.7.1.min.js"></script>
 <script>
     $(document).ready(function(){
-        $('#btn').click(function(event){
-            event.preventDefault();
-
-            var user_id = "{{user_id}}"
-            var csrf = '{{csrf_token()}}'
-            var form_data = new FormData($('#projectform')[0]);
-            
-            $.ajax({
-                url:'/seenIT/hub/db/',
-                type:'POST',
-                data: form_data,
-                cache: false,
-                contentType: false,
-                processData:false,
-                headers: {
-                    'X-CSRFToken': csrf
-                },
-                error:function(rsp){
-                    console.log(rsp)
-                    $('#info').addClass('alert alert-danger').html("An error occurred. Try again.").fadeIn();
-                    setTimeout(function(){
-                        window.location.href = "/seenIT/hub/";}, 3000);
-                },
-                
-                success: function(rsp){
-                    $('#info').removeClass('alert alert-danger alert-success').fadeOut(9000)
-            
-                    if (rsp.status == 'media') {
-                        $('#info').addClass('text-danger')
-                        $('#info').html(rsp.msg)
+        // Back to top button
+        $(window).scroll(function() {
+            if ($(this).scrollTop() > 300) {
+                $('.back-to-top').addClass('visible');
+            } else {
+                $('.back-to-top').removeClass('visible');
+            }
+        });
         
-                    }else if(rsp.status == 'empty'){
-                        $('#info').addClass('alert alert-danger mt-2');
-                        $('#info').html(rsp.msg);
-                    }else{
-                        $('#info').addClass('alert alert-success mt-2');
-                        $('#info').html(rsp.msg);
-                        $('#projectform')[0].reset();
-                    }
-                },
-
-                beforeSend: function(){
-                    $('#info').html('<div class="spinner-border text-primary"><span class="visually-hidden">Loading...</span></div>')
-                },
-                complete: function(){
-                    $('#btn').html('Project Uploaded');
-                    setTimeout(function(){
-                        $('#btn').html('Upload Project');
-                    }, 2000);
-                }
-            })
-        })
-    })
+        $('.back-to-top').click(function(e) {
+            e.preventDefault();
+            $('html, body').animate({scrollTop: 0}, 500);
+        });
+        
+        // Like button interaction
+        $('.like-btn').click(function() {
+            $(this).toggleClass('active');
+            if ($(this).hasClass('active')) {
+                $(this).html('<i class="fas fa-heart me-1" style="color: #f72585;"></i> Liked');
+            } else {
+                $(this).html('<i class="far fa-heart me-1"></i> Like');
+            }
+        });
+    });
 </script>
 {% endblock %}

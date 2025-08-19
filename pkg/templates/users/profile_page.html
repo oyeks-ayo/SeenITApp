@@ -1,345 +1,225 @@
 {% extends 'format.html' %}
 
-	{% block title %}
+{% block title %}
 <title>Profile – Promote Your Work & Grow Your Network</title>
-	{% endblock %}
-
-	{% block style %}
-	<style>
-
-	/* .nba{color: ghostwhite;
-		background-color:#007aff;
-	} */
-
-
-	.bigbody {
-
-		min-height: 800px;
-		background-color: #FAF7F8;
-		position: relative;
-		
-
-	}
-
-	.backCol {
-		background-color:#007aff;
-		min-height: inherit;
-
-	}
-
-	.backWhite {
-		background-color: #dedee2;
-		min-height: inherit;
-		
-		
-	}
-
-	.backImg{
-		background-image: url('/static/login_pics/log.jpg');
-		background-size: contain;
-		background-position:center ;
-		background-repeat: no-repeat;
-		min-height: 800px;
-	}
-	.backLayer {
-		
-		min-height: inherit;
-	}
-	
-	.whiteLayer {
-		background-color: #fdfdfb;
-	}
-
-	.darkerLayer{
-		background-color: rgba(100, 100, 100, 0.5);
-		height: 200px;
-		margin: 0px 5px;
-		
-	}
-
-	.fontInter {
-			font-family: 'Inter', sans-serif;
-	}
-
-	.bord {
-		border: 2px solid red;
-		min-height: 100px;
-	}
-
-	.fontOpen {
-		font-family: Open Sans, sans-serif;
-		color:#007aff;
-		font-size: 27px;				
-	}
-
-	.fontPoppins {
-			font-family:Poppins, sans-serif;
-			
-	}
-
-	</style>
-	{% endblock %}
-
-{% block content %}
-<!--====================== Background White Starts Here ==========================-->
-<div class="backWhite">
-	<!--========================== Layer Starts Here =================================-->
-	<div>
-	<!--==================== Cover&Profile Pics Starts Here ==========================-->
-		<div class="row banner align-items-center mx-1" 
-        	style= "background-image: url('/static/uploads/cover_pix/{{ user.profile.cover_pix if user.profile.cover_pix else 'avatar.jpg' }}'); 
-					background-size: cover; 
-					background-repeat: no-repeat;">
-		<div class= "col">
-			<img 	class="img-fluid rounded-circle" 
-					src = "/static/uploads/profile_pix/{{ user.profile.profile_pix if user.profile.profile_pix else 'avatar.jpg' }}" 
-					alt="profile picture" 
-					id="profilpicture" 
-					style="width: 400px; height: 380px;">
-		</div>
-	</div>
-	<!--===================== Cover&Profile Pics Ends Here ===========================-->
-	</div>
-	
-	<!--===================== FullName/BrandName Starts Here =========================-->
-							<div class="row mx-2 fontInter" style="min-height:50px; position:relative; margin-top: -127px;">
-								<div class="col">
-									<div class="row justify-content-center mb-5" style=" height:100px;">
-	
-										<div class="col-md-6 w-50 justify-content-end whiteLayer ms-auto rounded mt-1 text-dark" style="height:100px">
-											<h1 id="brandname">{{name}}</h1>
-											<p class="fs-2 fw-lighter" id="username">@{{username}}</p>
-										</div>
-									</div>
-									
-									<div class="row rounded justify-content-between fontInter">
-										<div class="col-sm-3 my-2 rounded">
-											{% if user.id == s_id %}
-											<a href="/profileform/{{user.id}}"  class="btn text-light form-control" 
-											style="background-color: #4B4B4B;">Edit Profile</a>
-											{% endif %}
-										</div>
-										<div class="col-sm-3 mb-4 rounded">
-											<a href="/seenIT/hub/"  class="btn text-light form-control" 
-											style="background-color: #4B4B4B;">seenIT Hub</a>
-										</div>
-									</div>
-								</div>
-							</div>
-	<!--===================== FullName/BrandName Ends Here ===========================-->
-	
-	<!--============================ Bio Starts Here =================================-->
-							<div class="row mx-2 fontInter justify-content-between">
-								<div class="col-md-5 my-2 rounded whiteLayer text-dark">
-									<div class="row">
-										<div class="col">
-											<h3>Bio/About me</h3>
-											<p>{{bio}}</p>
-										</div>
-									</div>
-									<div class="row">
-										<div class="col">
-											<div class="row">
-												<h3>Work & Services</h3>
-												<div class="col-4">
-													<strong>Services</strong>
-													<ul>
-														{% if services %}
-															{% for service in services %}
-															<li>{{service.service.name}}</li>
-															{% endfor %}
-															{% else %}
-															<li>No service</li>
-														{% endif %}
-													</ul>
-												</div>
-												<!-- About Me Section -->
-
-												<div class="col-4">
-													<strong>Skills</strong>
-												<ul>
-													{% if skills %}
-														{% for skill in skills %}
-														<li>{{skill.skill.name}}</li>
-														{% endfor %}
-														{% else %}
-														<li>No skills</li>
-													{% endif %}
-												</ul>
-												</div>
-													
-												<div class="col-4">
-													<strong>Category</strong>
-													{% if category %}
-													<li>{{category.name}}</li>
-													{% else %}
-													<li>No category</li>
-													{% endif %}
-												</div>
-											</div>
-										</div>
-									</div>
-									
-								</div>
-	
-								<div class="col-md-5 rounded  whiteLayer">
-									<div class="row">
-										<h3>Contact & Location</h3>
-										<div class="col d-flex justify-content-between px-5" 
-											style="color: #4B4B4B;">
-											<div class="col-4">
-												<i class="fa-solid fa-link"></i>
-												<span>{{blog}}</span>
-												<p></p>
-												<i class="fa-solid fa-phone"></i>
-												<span>{{phone}}</span>
-												<p></p>
-												<i class="fa-solid fa-box"></i>
-												<span>{{email}}</span>
-												<p></p>
-												<i class="fa-solid fa-spider"></i>
-												<span>{{social}}</span>
-											</div>
-											<div class="col-8">
-												<i class="fa-solid fa-house"></i>
-												<span>lives in {{state}} state</span>
-												<p></p>
-												<i class="fa-solid fa-comment"></i>
-												<span>slogan {{slogan}}</span>
-												<p></p>
-												<i class="fa-solid fa-comment"></i>
-												<span>birthday {{dob}}</span>
-											</div>
-										</div>
-									</div>
-									<div class="row">
-										<hr class="mt-3">
-										<div class="col-md-4">
-											<h4>{{projects|count}}</h4>
-											<p>Projects</p>
-										</div>
-	
-										<div class="col-md-4">
-											<h4>{{session['isonline']}}</h4>
-											<p>Users Online</p>
-										</div>
-										
-										{% if user.id == s_id %}
-										<div class="col-md-4">
-											<h4 style="color: greenyellow;">Online</h4>
-											<p>Status</p>
-										</div>
-										{% else %}
-										<div class="col-md-4">
-											<h4 style="color: yellow;">Offline</h4>
-											<p>Status</p>
-										</div>
-										{% endif %}
-									</div>
-								
-									<div class="row">
-										<div class="col">
-											<hr>
-											<h3>Recent Activity</h3>
-											{% for p in projects %}
-												{% if loop.index <= 3 %}
-													<p>{{ p.title }} <small class="text-muted">{{ p.datereg_project|time_ago }}</small></p>
-												{% endif %}
-											{% endfor %}
-										</div>
-									</div>
-	
-								</div>
-							</div>
-	<!--============================ Bio Ends Here ===================================-->
-	
-	<!--======================== Portfolio Starts Here ===============================-->
-<!-- In profile_page.html -->
- <div class="container p-5">
-	<h2>Featured Projects</h2>
-	<div class="row p-5" style="background-color: #fdfdfb;">
-		<div class="col-12 d-flex justify-content-evenly border ">
-			
-			{% if projects | sort(attribute='datereg_project', reverse=True)| slice(2) | first %}
-				{% for p in projects %}
-					{% if loop.index <= 3 %}
-					<div class="row p-5" >
-						<div class="col-4">
-							<div class="row"
-							style="width: 200px;
-									">
-								{% if p.title %}
-								<div class="col-12 mb-1 card-title" 
-								style="height: 50px;">
-									<p>title: {{p.title}}</p>
-								</div>
-									{% else %}
-								<div class="col-12">
-									<p class="mb-3 text-muted">No title for this project</p>
-								</div>
-								{% endif %}
-								<div class="col-12">
-									
-									<small class="text-muted">Description: {{ p.description | truncate(150) }}...</small>
-								</div>
-
-								{% for media in p.media %}
-								{% if media.file_type == 'image' %}
-								<div class="col-12 mb-3" 
-								style="height: 100px;">
-									<img class="card-img-top rounded" src="/static/uploads/project/project_pix/{{ media.filename }}" 
-									alt="{{ p.title }}"
-									style="max-height: 150px; object-fit: cover;">
-								</div>
-									
-								{% elif media.file_type == 'video' %}
-								<div class="col-12">
-										<button class="btn btn-link p-0 mb-1 text-decoration-none text-muted" 
-												type="button" 
-												data-bs-toggle="collapse" 
-												data-bs-target="#video-{{ p.project_id }}" 
-												aria-expanded="false" 
-												aria-controls="video-{{ p.project_id }}">
-											See Video
-										</button>
-										<div class="collapse" id="video-{{ p.project_id }}">
-											<div class="ratio ratio-16x9 mb-1" style="width: 200px;">
-												<video controls class="rounded">
-													<source src="/static/uploads/project/project_video/{{ media.filename }}" type="video/mp4">
-												</video>
-											</div>
-										</div>		
-								</div>
-								{% else %}
-								<div class="col-12">
-									<small class="text-muted">This project has no media content</small>
-								</div>
-								{% endif %}
-								{% endfor %}
-							</div>
-						</div>
-					</div>
-						{% endif %}
-					{% endfor %}
-				{% endif %}
-		</div>
-		<div class="row">
-			<div class="col">
-				<a class="btn btn-sm btn-warning my-5" href="/all/projects/{{user.id}}/">See all {{projects|count}} Projects</a>
-			</div>
-		</div>
-	</div>
-	
-
-    
-	<!--========================= Portfolio Ends Here ================================-->
-							
-	
-	<!--========================== Layer Ends Here =================================-->
-</div>
-	<!--====================== Background White Ends Here ==========================-->
-
 {% endblock %}
 
+{% block style %}
+<style>
+.bigbody {
+    min-height: 800px;
+    background-color: #FAF7F8;
+    position: relative;
+}
 
-			
+.backWhite {
+    background-color: #f8f9fa;
+    min-height: inherit;
+}
+
+.banner {
+    position: relative;
+    height: 350px;
+    background-size: cover;
+    background-position: center;
+    border-radius: 0 0 20px 20px;
+    overflow: hidden;
+}
+
+.profile-pic {
+    position: absolute;
+    bottom: 0px;
+    left: 20%;
+    transform: translateX(-50%);
+    border: 5px solid #fff;
+    border-radius: 50%;
+    width: 350px;
+    height: 350px;
+    object-fit: cover;
+}
+.username-box {
+    margin-top: 100px;
+    text-align: center;
+}
+.username-box h1 {
+    font-family: 'Poppins', sans-serif;
+    font-size: 32px;
+    font-weight: bold;
+}
+.username-box p {
+    font-size: 18px;
+    color: #6c757d;
+}
+
+.card-custom {
+    background: #fff;
+    border-radius: 15px;
+    padding: 20px;
+    margin-bottom: 20px;
+    box-shadow: 0px 2px 6px rgba(0,0,0,0.08);
+}
+
+.card-custom h3 {
+    font-size: 20px;
+    font-weight: 600;
+    margin-bottom: 15px;
+    color: #172436;
+}
+
+.project-card {
+    border-radius: 15px;
+    overflow: hidden;
+    transition: transform 0.2s ease-in-out;
+}
+.project-card:hover {
+    transform: translateY(-5px);
+    box-shadow: 0px 6px 20px rgba(0,0,0,0.1);
+}
+.project-card img, .project-card video {
+    border-radius: 15px;
+    width: 100%;
+    height: 180px;
+    object-fit: cover;
+}
+
+.btn-custom {
+    background-color: #172436;
+    color: #fff;
+    border-radius: 10px;
+    transition: background 0.3s;
+}
+.btn-custom:hover {
+    background-color: #0f172a;
+    color: #fff;
+}
+</style>
+{% endblock %}
+
+{% block content %}
+<div class="backWhite mt-2">
+
+    <!-- Cover & Profile -->
+    <div class="banner" style="background-image: url('/static/uploads/cover_pix/{{ user.profile.cover_pix if user.profile.cover_pix else 'avatar.jpg' }}');">
+        <img src="/static/uploads/profile_pix/{{ user.profile.profile_pix if user.profile.profile_pix else 'avatar.jpg' }}" 
+             alt="profile picture"
+             class="profile-pic">
+    </div>
+
+    <!-- Name & Username -->
+    <div class="username-box">
+        <h1>{{ name }}</h1>
+        <p>@{{ username }}</p>
+        <div class="d-flex justify-content-center gap-3">
+            {% if user.id == s_id %}
+                <a href="/profileform/{{ user.id }}" class="btn btn-sm btn-dark px-4">Edit Profile</a>
+            {% endif %}
+            <a href="/seenIT/hub/" class="btn btn-sm btn-secondary px-4">seenIT Hub</a>
+        </div>
+    </div>
+
+    <div class="container mt-5">
+
+        <!-- Bio & Services -->
+        <div class="row">
+            <div class="col-md-6">
+                <div class="card-custom">
+                    <h3>About Me</h3>
+                    <p>{{ bio }}</p>
+                    <div class="row mt-3">
+                        <div class="col">
+                            <strong>Services</strong>
+                            <ul>
+                                {% if services %}
+                                    {% for service in services %}
+                                        <li>{{ service.service.name }}</li>
+                                    {% endfor %}
+                                {% else %}
+                                    <li>No service</li>
+                                {% endif %}
+                            </ul>
+                        </div>
+                        <div class="col">
+                            <strong>Skills</strong>
+                            <ul>
+                                {% if skills %}
+                                    {% for skill in skills %}
+                                        <li>{{ skill.skill.name }}</li>
+                                    {% endfor %}
+                                {% else %}
+                                    <li>No skills</li>
+                                {% endif %}
+                            </ul>
+                        </div>
+                        <div class="col">
+                            <strong>Category</strong>
+                            <ul>
+                                {% if category %}
+                                    <li>{{ category.name }}</li>
+                                {% else %}
+                                    <li>No category</li>
+                                {% endif %}
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Contact & Stats -->
+            <div class="col-md-6">
+                <div class="card-custom">
+                    <h3>Contact & Location</h3>
+                    <p><i class="fa-solid fa-link"></i> {{ blog }}</p>
+                    <p><i class="fa-solid fa-phone"></i> {{ phone }}</p>
+                    <p><i class="fa-solid fa-envelope"></i> {{ email }}</p>
+                    <p><i class="fa-solid fa-globe"></i> {{ social }}</p>
+                    <hr>
+                    <p><i class="fa-solid fa-house"></i> Lives in {{ state }} state</p>
+                    <p><i class="fa-solid fa-comment"></i> {{ slogan }}</p>
+                    <p><i class="fa-solid fa-cake-candles"></i> {{ dob }}</p>
+                    <hr>
+                    <div class="d-flex justify-content-between">
+                        <div><h4>{{ projects|count }}</h4><p>Projects</p></div>
+                        <div><h4>{{ session['isonline'] }}</h4><p>Users Online</p></div>
+                        <div>
+                            {% if user.id == s_id %}
+                                <h4 class="text-success">Online</h4><p>Status</p>
+                            {% else %}
+                                <h4 class="text-warning">Offline</h4><p>Status</p>
+                            {% endif %}
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Projects -->
+        <div class="mt-4">
+            <h3 class="mb-3">Featured Projects</h3>
+            <div class="row g-3">
+                {% for p in projects[:3] %}
+                <div class="col-md-4">
+                    <div class="card-custom project-card">
+                        <div class="p-2">
+                            <h5>{{ p.title or "Untitled Project" }}</h5>
+                            <small class="text-muted">{{ p.description | truncate(100) }}...</small>
+                        </div>
+                        {% for media in p.media %}
+                            {% if media.file_type == 'image' %}
+                                <img src="/static/uploads/project/project_pix/{{ media.filename }}" alt="{{ p.title }}">
+                            {% elif media.file_type == 'video' %}
+                                <video controls>
+                                    <source src="/static/uploads/project/project_video/{{ media.filename }}" type="video/mp4">
+                                </video>
+                            {% endif %}
+                        {% endfor %}
+                    </div>
+                </div>
+                {% endfor %}
+            </div>
+            <div class="text-center mt-4">
+                <a class="btn btn-custom" href="/all/projects/{{ user.id }}/">See all {{ projects|count }} Projects</a>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

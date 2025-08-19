@@ -1,6 +1,7 @@
 from datetime import datetime
 from functools import wraps
 import json
+from sqlalchemy import func # type: ignore
 from flask import render_template,request,redirect,url_for,flash,make_response,session
 from flask_wtf.csrf import CSRFError, generate_csrf # type: ignore
 from pkg import app,csrf
@@ -18,7 +19,7 @@ def inject_users():
 # **************FOR NAVBAR****************
     user = None
     if 'isonline' in session:
-        user = db.session.query(Users).get(session['isonline'])
+        navuser = db.session.query(Users).get(session['isonline'])
 # **************FOR NAVBAR****************
 
 # **************FOR CSRF TOKEN AND SERACH BOX****************
@@ -26,7 +27,8 @@ def inject_users():
     for user in users:
         user_id = user.id
 
-    return dict(users=users,
+    return dict(navuser=navuser,
+                users=users,
                 user=user, 
                 user_id=user_id,
                 csrf_token=generate_csrf)
@@ -51,7 +53,16 @@ def home():
 
 @app.route('/aboutUs/')
 def about_us():
-    return render_template('users/About_Us.html')
+    try:
+        # Fetch the total number of users from the database
+        no_users = db.session.query(Users).count()
+        return render_template('users/About_Us.html',users=no_users)
+
+    except Exception as e:
+        app.logger.error(f"Something went wrong: {str(e)}", exc_info=True)
+        db.session.rollback()
+        flash(f'An error occurred: {e}', 'error')
+        return redirect(url_for('home'))
 
 # *********************************** ABOUT US **************************************************
     
@@ -111,6 +122,29 @@ def contact():
 
 # *********************************** CONTACT US **************************************************
 
+
+# *********************************** HUB **************************************************
+
+@app.route('/seenIT/hub/project/<int:project_id>', methods=['GET'])
+@login_required
+def seenITHubProject(project_id):
+    try:
+        user_id = session.get('isonline')
+        user = db.session.query(Users).get_or_404(user_id)
+        project = Project.query.get_or_404(project_id)
+
+        return render_template(
+            'users/seenITHub.html',
+            project=project,
+            user=user
+        )
+    except CSRFError as e:
+        flash(f'CSRF Error: {e}', 'error')
+        return redirect(url_for('seenITHub'))
+    
+# *********************************** HUB **************************************************
+
+
 # *********************************** SEENIT HUB PAGE **************************************************
 @app.route('/seenIT/hub/', methods=['GET'])
 @login_required
@@ -129,6 +163,14 @@ def seenITHub():
         states = State.query.order_by(State.name).all()
         profile_pix = profile.profile_pix if profile else None
         cover_pix = profile.cover_pix if profile else None
+
+        for pro in all_projects:
+            for media in pro.media:
+                if media.file_type == 'image':
+                    img = media.filename
+                elif media.file_type == 'video':
+                    vid = media.filename
+
         return render_template(
             'users/seenITHub.html',
             form=SeenITHubUpload(),
@@ -145,10 +187,42 @@ def seenITHub():
     except CSRFError as e:
         flash(f'CSRF Error: {e}', 'error')
         return redirect(url_for('seenITHub'))
-    
                  
 
 # *********************************** SEENIT HUB PAGE **************************************************
+
+# *********************************** SEENIT HUB PAGE CATEGORY SEARCH **************************************************
+
+
+# *********************************** SEENIT HUB PAGE CATEGORY SEARCH**************************************************
+@app.route('/category/filter/')
+@login_required
+def category_filter():
+    try:
+        cat_id = request.form.get('category_id')
+        
+        # Fetch projects based on filter
+        if cat_id:
+            projects = db.session.query(Project).filter(Project.category_id == cat_id).all()
+        else:
+            # If no category is selected, get all projects
+            projects = db.session.query(Project).all()
+            
+        # Check if the request is an AJAX request (for filtering)
+        if request.headers.get('X-Requested-With') == 'XMLHttpRequest':
+            # Render JUST the project grid HTML using a template string or a Jinja macro
+            data2send = render_template('users/projectfilter.html', projects=projects)
+        
+        return data2send
+    except Exception as e:
+        app.logger.error(f"Error in category_filter: {str(e)}", exc_info=True)
+        flash('An error occurred while filtering projects.', 'error')
+        return redirect(url_for('seenITHub'))
+    except CSRFError as e:
+        flash(f'CSRF Error: {e}', 'error')
+        return redirect(url_for('seenITHub'))
+
+
 
 # *********************************** PROFILE PAGE **************************************************
 @app.route('/profile/page/<int:id>/')
@@ -409,3 +483,61 @@ def user_search():
         flash('An error occurred while searching.', 'error')
         return redirect(url_for('user_search'))
 # *********************************** USER SEARCH **************************************************
+
+# *********************************** ERROR PAGES **************************************************
+
+@app.errorhandler(404)
+def page_not_found(e):
+    # Log the error details
+    app.logger.error(f"404 Error: {str(e)}", exc_info=True)
+    # Return a custom 404 error page
+    return render_template('users/errorpage.html', error404=e), 404
+
+@app.errorhandler(500)
+def internal_server_error(e):
+    # Log the error details
+    app.logger.error(f"500 Error: {str(e)}", exc_info=True)
+    # Return a custom 500 error page
+    return render_template('users/errorpage.html', error500=e), 500
+
+@app.errorhandler(403)
+def forbidden(e):
+    # Log the error details
+    app.logger.error(f"403 Error: {str(e)}", exc_info=True)
+    # Return a custom 403 error page
+    return render_template('users/errorpage.html', error403=e), 403
+
+
+# *********************************** ERROR PAGES **************************************************
+
+# *********************************** FILTER BY CATEGORY **************************************************
+
+@app.route('/filter/category/<int:category_id>/', methods=['GET'])
+@login_required
+def filter_by_category(category_id):
+    try:
+        # Fetch the category by ID
+        category = db.session.query(Category).get_or_404(category_id)
+        
+        # Fetch all users who have projects in the specified category
+        users = db.session.query(Users)\
+            .join(Project, Users.id == Project.user_id)\
+            .filter(Project.category_id == category.id)\
+            .distinct()\
+            .all()
+        
+        if not users:
+            flash('No users found in this category.', 'info')
+            return redirect(url_for('seenITHub'))
+
+        return render_template('users/filter_by_category.html', 
+                               users=users, 
+                               category=category)
+
+    except Exception as e:
+        app.logger.error(f"Error filtering by category: {str(e)}", exc_info=True)
+        flash('An error occurred while filtering by category.', 'error')
+        return redirect(url_for('seenITHub'))
+
+# *********************************** FILTER BY CATEGORY **************************************************
+

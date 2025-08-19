@@ -118,7 +118,7 @@ def adminresetpwd():
 # *********************************** ADMIN PASSWORD RESET **************************************************
 
 # *********************************** ADMIN LOGOUT **************************************************
-@app.route('/user/logout/')
+@app.route('/admin/logout/')
 @login_required
 def admin_logout():
     if session.get('adminisonline') != None and session.get('admin') != None:
