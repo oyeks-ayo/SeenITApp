@@ -1,4 +1,15 @@
-.env
-instance/config.py
+# Ignore Python cache
 __pycache__/
 *.pyc
+*.pyo
+
+# Ignore environment variables
+.env
+instance/
+
+# Ignore macOS system files
+.DS_Store
+
+# Ignore virtual environments
+venv/
+.vSeenIT/
