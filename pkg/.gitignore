@@ -1,15 +1,34 @@
-# Ignore Python cache
+# ---- Python ----
 __pycache__/
-*.pyc
-*.pyo
+*.py[cod]
+*.so
 
-# Ignore environment variables
-.env
+# ---- Virtual environments ----
+venv/
+ENV/
+.env/
+.venv/
+
+# ---- Flask / Instance ----
 instance/
+*.db
+*.sqlite3
 
-# Ignore macOS system files
+# ---- Environment variables ----
+.env
+.env.*
+
+# ---- macOS ----
 .DS_Store
 
-# Ignore virtual environments
-venv/
-.vSeenIT/
+# ---- Logs ----
+*.log
+
+# ---- IDE / Editors ----
+.vscode/
+.idea/
+*.swp
+*~
+
+# ---- Migrations (optional) ----
+#migrations/
