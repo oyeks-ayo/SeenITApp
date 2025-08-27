@@ -26,46 +26,51 @@ def signup_db():
     cpwd = request.form.get('cpassword')
     terms = request.form.get('terms')
 
-    check = db.session.query(Users).filter((Users.username == username)|(Users.email == email)|(Users.phone == phone)).first()
+    try:
+        check = db.session.query(Users).filter((Users.username == username)|(Users.email == email)|(Users.phone == phone)).first()
 
-    if fname != '' and lname != '' and username != '' and email != '' and phone != '' and pwd != '':
-        if pwd != cpwd:
-            data2return = {'status':'danger', 'message':'passwords do not match!'}
-            return json.dumps(data2return)
-        elif terms != 'y':
-            data2return = {'status':'danger', 'message':'Kindly agree to terms'}
-            return json.dumps(data2return)
-        elif check: 
-            if check.username == username:
-                data2return = {'status':'username', 'message':'Username already taken!'}
+        if fname != '' and lname != '' and username != '' and email != '' and phone != '' and pwd != '':
+            if pwd != cpwd:
+                data2return = {'status':'danger', 'message':'passwords do not match!'}
                 return json.dumps(data2return)
-            if check.email == email:
-                data2return = {'status':'email', 'message':'Email already taken!'}
+            elif terms != 'y':
+                data2return = {'status':'danger', 'message':'Kindly agree to terms'}
                 return json.dumps(data2return)
-            if check.phone == phone:
-                data2return = {'status':'phone', 'message':'Phone Number already taken!'}
-                return json.dumps(data2return)
+            elif check: 
+                if check.username == username:
+                    data2return = {'status':'username', 'message':'Username already taken!'}
+                    return json.dumps(data2return)
+                if check.email == email:
+                    data2return = {'status':'email', 'message':'Email already taken!'}
+                    return json.dumps(data2return)
+                if check.phone == phone:
+                    data2return = {'status':'phone', 'message':'Phone Number already taken!'}
+                    return json.dumps(data2return)
+            else:
+                terms='Agreed'
+                hashed_pwd = generate_password_hash(pwd)
+                insert_to_db = Users(fname=fname, 
+                                    lname=lname, 
+                                    mname=mname, 
+                                    username=username, 
+                                    email=email, 
+                                    phone=phone, 
+                                    user_pwd=hashed_pwd, 
+                                    terms=terms)
+                db.session.add(insert_to_db)
+                db.session.commit()
+                user_id = insert_to_db.id
+
+                if user_id:
+                    data2return = {'status':'success', 'message':'You have successfully signed up to SeenIT, kindly login to do more'}
+                    return json.dumps(data2return)
         else:
-            terms='Agreed'
-            hashed_pwd = generate_password_hash(pwd)
-            insert_to_db = Users(fname=fname, 
-                                lname=lname, 
-                                mname=mname, 
-                                username=username, 
-                                email=email, 
-                                phone=phone, 
-                                user_pwd=hashed_pwd, 
-                                terms=terms)
-            db.session.add(insert_to_db)
-            db.session.commit()
-            user_id = insert_to_db.id
+            data2return = {'status':'danger', 'message': 'Fields with * cannot be empty!'}
+            return json.dumps(data2return)
+    except Exception as e:
+        db.session.rollback()
+        return jsonify({'status':'error', 'msg':f'An error occurred: {str(e)}'})
 
-            if user_id:
-                data2return = {'status':'success', 'message':'You have successfully signed up to SeenIT, kindly login to do more'}
-                return json.dumps(data2return)
-    else:
-        data2return = {'status':'danger', 'message': 'Fields with * cannot be empty!'}
-        return json.dumps(data2return)
 
 # ***************************** SIGN UP TO DB *************************************************
 
