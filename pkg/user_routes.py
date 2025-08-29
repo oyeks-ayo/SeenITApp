@@ -18,6 +18,7 @@ def inject_users():
 
 # **************FOR NAVBAR****************
     user = None
+    navuser = None
     if 'isonline' in session:
         navuser = db.session.query(Users).get(session['isonline'])
 # **************FOR NAVBAR****************
@@ -98,15 +99,14 @@ def login_required(f):
     return login_decorator
 # *********************************** LOGIN DECORATOR **************************************************
 
-# *********************************** LOGIN DECORATOR **************************************************
-
+# *********************************** USER LOGOUT **************************************************
 @app.route('/user/logout/')
 @login_required
 def user_logout():
     if session.get('isonline') != None:
         session.pop('isonline',None)        
     return redirect(url_for('userLogin'))
-# *********************************** LOGIN DECORATOR **************************************************
+# *********************************** USER LOGOUT **************************************************
 
 
 # *********************************** CONTACT US **************************************************

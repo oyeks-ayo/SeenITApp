@@ -21,10 +21,10 @@ def create_app():
     csrf.init_app(app)
     migrate = Migrate(app,db)
 
-    from pkg import forms, user_routes, admin_routes, dbroutes
+    
 
     return app
 
 app = create_app()
 
-# from pkg import forms, user_routes, admin_routes, dbroutes
+from pkg import forms, user_routes, admin_routes, dbroutes

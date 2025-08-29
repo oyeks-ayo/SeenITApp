@@ -103,7 +103,7 @@ def admin_dashboard():
                            users=users,
                            selected_user=selected_user,
                            selected_project=selected_project,
-                            form=form,  # Pass the form for potential use in the template
+                            form=form,
                             project_count=project_count)
 # *********************************** ADMIN DASHBOARD **************************************************
 

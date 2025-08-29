@@ -366,22 +366,16 @@ def seenITHub_db():
             file_type = 'image'
             db_project = secrets.token_hex(10) + ext
             media.save('pkg/static/uploads/project/project_pix/'+db_project)
-            print(f'pictures ===> {db_project}')
 
         elif ext.lower() in video_format:
             file_type = 'video'
             db_project = secrets.token_hex(10) + ext
             media.save('pkg/static/uploads/project/project_video/'+db_project)
-            print(f'video ===> {db_project}')
 
         else:
             continue
         
         if db_project:
-            print(f'pictures ===> {db_project}')
-            print(f'video ===> {db_project}')
-            
-
             newP = Project(
             user_id = user_id,
             title=title,
