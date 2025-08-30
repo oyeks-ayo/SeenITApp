@@ -297,7 +297,7 @@ def profile_page(id):
                                                         dob=dob,
                                                         projects=projects)
     except CSRFError as e:
-        flash(f'CSRF Error: {e}', 'error')
+        flash(f'CSRF Error: Token error', 'error')
         return redirect(url_for('seenITHub'))
     except Exception as e:
         app.logger.error(f"Something went wrong: {str(e)}", exc_info=True)
