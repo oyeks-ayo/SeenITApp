@@ -105,7 +105,7 @@ def userlogin_db():
 
             if confirm_pwd:
                 session['isonline'] = from_db.id
-                data2send = {'status':'success','message':f'/profile/page/{session['isonline']}'}
+                data2send = {'status': 'success','message': url_for('profile_page', id=session['isonline'])} #/profile/page/{session['isonline']} fallback to this incase of any error or challenge
                 return json.dumps(data2send)
             else:
                 data2send = {'status':'danger','message':'Invalid Password!'}

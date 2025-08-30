@@ -1,34 +1,48 @@
-# ---- Python ----
-__pycache__/
-*.py[cod]
-*.so
-
-# ---- Virtual environments ----
-venv/
-ENV/
-.env/
-.venv/
-
-# ---- Flask / Instance ----
+# Ignore environment & config
+.env
 instance/
-*.db
 *.sqlite3
 
-# ---- Environment variables ----
-.env
-.env.*
+# Python
+__pycache__/
+*.pyc
+*.pyo
+*.pyd
+*.pyd
+*.pkl
 
-# ---- macOS ----
+# Virtual environment
+venv/
+ENV/
+.venv/
+.vSeenIT/
+
+# macOS system files
 .DS_Store
+.AppleDouble
+.LSOverride
 
-# ---- Logs ----
+# Windows system files
+Thumbs.db
+ehthumbs.db
+Desktop.ini
+
+# Logs & temp
 *.log
+*.pot
+*.pid
+*.seed
+*.out
+*.bak
+*.swp
 
-# ---- IDE / Editors ----
+# IDE/project files
 .vscode/
 .idea/
-*.swp
-*~
+*.sublime-project
+*.sublime-workspace
 
-# ---- Migrations (optional) ----
-#migrations/
+# Node stuff (in case you add frontend later)
+node_modules/
+npm-debug.log
+yarn-error.log
