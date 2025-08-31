@@ -1,9 +1,13 @@
 from datetime import datetime
 from flask_sqlalchemy import SQLAlchemy # type: ignore
-from pkg import app
 
-db = SQLAlchemy(app)
 
+def load_models():
+    from pkg import app
+    db = SQLAlchemy(app)
+    return db
+
+db = load_models()
 class Admin(db.Model):
     __tablename__ = 'admin'
     id = db.Column(db.Integer, primary_key=True, autoincrement=True)
