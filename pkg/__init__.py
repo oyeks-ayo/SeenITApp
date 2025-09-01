@@ -45,6 +45,16 @@ def create_app():
     # Initialize extensions
     from pkg.models import db
     db.init_app(app)
+
+    # Test database connection
+    with app.app_context():
+        try:
+            db.session.execute('SELECT 1')
+            print("Database connection successful!")
+        except Exception as e:
+            print(f"Database connection failed: {e}")
+            # You might want to add retry logic here
+
     csrf.init_app(app)
     migrate = Migrate(app, db)
 

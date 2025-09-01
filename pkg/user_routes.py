@@ -487,6 +487,14 @@ def forbidden(e):
 
 # *********************************** ERROR PAGES **************************************************
 
+@user_bp.route('/health')
+def health_check():
+    try:
+        db.session.execute('SELECT 1')
+        return {'status': 'healthy', 'database': 'connected'}, 200
+    except Exception as e:
+        return {'status': 'unhealthy', 'database': 'disconnected', 'error': str(e)}, 500
+    
 # *********************************** FILTER BY CATEGORY **************************************************
 
 @user_bp.route('/filter/category/<int:category_id>/', methods=['GET'])
