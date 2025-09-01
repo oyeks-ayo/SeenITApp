@@ -59,6 +59,9 @@ def create_app():
     from pkg.dbroutes import db_bp
     app.register_blueprint(db_bp)
 
+    from pkg.user_routes import time_ago_filter
+    app.jinja_env.filters['time_ago'] = time_ago_filter
+
     return app
 
 app = create_app()

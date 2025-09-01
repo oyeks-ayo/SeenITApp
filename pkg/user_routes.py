@@ -521,7 +521,7 @@ def filter_by_category(category_id):
 # *********************************** TIME FUNCTION **************************************************
 
 
-@user_bp.template_filter('time_ago')
+# @user_bp.template_filter('time_ago')
 def time_ago_filter(dt):
     now = datetime.utcnow()
     diff = now - dt
