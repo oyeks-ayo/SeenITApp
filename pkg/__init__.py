@@ -45,32 +45,17 @@ def create_app():
     # Initialize extensions
     from pkg.models import db
     db.init_app(app)
-
-    # Test database connection
-    with app.app_context():
-        try:
-            db.session.execute('SELECT 1')
-            print("Database connection successful!")
-        except Exception as e:
-            print(f"Database connection failed: {e}")
-            # You might want to add retry logic here
-
     csrf.init_app(app)
     migrate = Migrate(app, db)
 
-    # Register blueprints (AFTER all initialization)
+    # Register blueprints
     from pkg.user_routes import user_bp
-    app.register_blueprint(user_bp)
-    
-    # Register other blueprints if you have them
     from pkg.admin_routes import admin_bp
+    from pkg.db_routes import db_bp
+    
+    app.register_blueprint(user_bp)
     app.register_blueprint(admin_bp)
-
-    from pkg.dbroutes import db_bp
     app.register_blueprint(db_bp)
-
-    from pkg.user_routes import time_ago_filter
-    app.jinja_env.filters['time_ago'] = time_ago_filter
 
     return app
 
