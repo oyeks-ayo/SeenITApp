@@ -9,6 +9,7 @@ from pkg.config import Appconfig
 csrf = CSRFProtect()
 
 def create_app():
+    from pkg import forms, user_routes, admin_routes, dbroutes
     from pkg.models import db
 
     load_dotenv()  # Load environment variables from .env file
@@ -21,10 +22,6 @@ def create_app():
     csrf.init_app(app)
     migrate = Migrate(app,db)
 
-    
-
     return app
 
 app = create_app()
-
-from pkg import forms, user_routes, admin_routes, dbroutes
