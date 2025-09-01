@@ -3,7 +3,7 @@ from functools import wraps
 from flask import Blueprint, render_template,request,redirect,url_for,flash,make_response,session
 from flask_wtf.csrf import CSRFError # type: ignore
 from werkzeug.security import check_password_hash # type: ignore
-from pkg import app,csrf
+from pkg import csrf
 from pkg.forms import AdminLogin,AdminPasswordReset
 from pkg.models import db, Admin, Users, Project
 # from pkg.forms import 
@@ -24,7 +24,7 @@ def login_required(f):
     return login_decorator
 # *********************************** LOGIN DECORATOR **************************************************
 # *********************************** ADMIN LOGIN **************************************************
-@app.route('/admin/login/', methods=['POST', 'GET'])
+@admin_bp.route('/admin/login/', methods=['POST', 'GET'])
 def adminlogin():
     form = AdminLogin()
 
@@ -56,7 +56,7 @@ def adminlogin():
 # *********************************** ADMIN LOGIN **************************************************
 
 # *********************************** ADMIN DASHBOARD **************************************************
-@app.route('/admin/dashboard/', methods=['GET', 'POST'])
+@admin_bp.route('/admin/dashboard/', methods=['GET', 'POST'])
 @login_required
 def admin_dashboard():
     if 'admin' not in session:
@@ -111,7 +111,7 @@ def admin_dashboard():
 
 
 # *********************************** ADMIN PASSWORD RESET **************************************************
-@app.route('/admin/reset/')
+@admin_bp.route('/admin/reset/')
 def adminresetpwd():
     form = AdminPasswordReset()
 
@@ -120,7 +120,7 @@ def adminresetpwd():
 # *********************************** ADMIN PASSWORD RESET **************************************************
 
 # *********************************** ADMIN LOGOUT **************************************************
-@app.route('/admin/logout/')
+@admin_bp.route('/admin/logout/')
 @login_required
 def admin_logout():
     if session.get('adminisonline') != None and session.get('admin') != None:
