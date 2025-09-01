@@ -360,33 +360,6 @@ def profile_form(id):
 
 # *********************************** PROFILE FORM **************************************************
 
-# *********************************** TIME FUNCTION **************************************************
-
-
-@user_bp.template_filter('time_ago')
-def time_ago_filter(dt):
-    now = datetime.utcnow()
-    diff = now - dt
-    
-    periods = [
-        ('year', 365*24*60*60),
-        ('month', 30*24*60*60),
-        ('day', 24*60*60),
-        ('hour', 60*60),
-        ('minute', 60)
-    ]
-    
-    for period, seconds in periods:
-        value = diff.total_seconds() // seconds
-        if value:
-            return f"{int(value)} {period}{'s' if value > 1 else ''} ago"
-    return "just now"
-
-
-# <small>Posted {{ project.datereg_project|time_ago }}</small>
-# {Example output: "3 hours ago" #}
-# *********************************** TIME FUNCTION **************************************************
-
 # *********************************** ALL PROJECTS **************************************************
 @user_bp.route('/all/projects/<int:id>/')
 @login_required
@@ -545,3 +518,29 @@ def filter_by_category(category_id):
 
 # *********************************** FILTER BY CATEGORY **************************************************
 
+# *********************************** TIME FUNCTION **************************************************
+
+
+@user_bp.template_filter('time_ago')
+def time_ago_filter(dt):
+    now = datetime.utcnow()
+    diff = now - dt
+    
+    periods = [
+        ('year', 365*24*60*60),
+        ('month', 30*24*60*60),
+        ('day', 24*60*60),
+        ('hour', 60*60),
+        ('minute', 60)
+    ]
+    
+    for period, seconds in periods:
+        value = diff.total_seconds() // seconds
+        if value:
+            return f"{int(value)} {period}{'s' if value > 1 else ''} ago"
+    return "just now"
+
+
+# <small>Posted {{ project.datereg_project|time_ago }}</small>
+# {Example output: "3 hours ago" #}
+# *********************************** TIME FUNCTION **************************************************
