@@ -1,6 +1,7 @@
 import time
 import logging
 from sqlalchemy import create_engine # type: ignore
+from sqlalchemy import text # type: ignore
 from sqlalchemy.exc import OperationalError # type: ignore
 from pkg.models import db
 
@@ -13,7 +14,7 @@ def init_database(app):
     for attempt in range(max_retries):
         try:
             with app.app_context():
-                db.session.execute('SELECT 1')
+                db.session.execute(text('SELECT 1'))
                 logger.info("Database connection successful")
                 return True
         except OperationalError as e:
@@ -26,18 +27,22 @@ def init_database(app):
     return False
 
 def check_database_connection(app):
-    """Check if database is accessible"""
-    max_retries = 3
+    """Check if database is accessible with retries"""
+    max_retries = 5
+    retry_delay = 3  # seconds
+    
     for attempt in range(max_retries):
         try:
             with app.app_context():
-                db.session.execute('SELECT 1')
+                # FIX: Use text() for explicit SQL declaration
+                db.session.execute(text('SELECT 1'))  # <-- ADD text() here
                 logger.info("✅ Database connection successful")
                 return True
         except OperationalError as e:
-            logger.error(f"❌ Database connection failed (attempt {attempt + 1}): {e}")
+            logger.warning(f"Database connection failed (attempt {attempt + 1}/{max_retries}): {e}")
             if attempt < max_retries - 1:
-                time.sleep(2)
+                time.sleep(retry_delay)
                 continue
+            logger.error("❌ All database connection attempts failed")
             return False
     return False

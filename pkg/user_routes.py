@@ -487,13 +487,24 @@ def forbidden(e):
 
 # *********************************** ERROR PAGES **************************************************
 
+from sqlalchemy import text  # type: ignore # <-- ADD THIS IMPORT
+
 @user_bp.route('/health')
 def health_check():
     try:
-        db.session.execute('SELECT 1')
-        return {'status': 'healthy', 'database': 'connected'}, 200
+        # FIX: Use text() for explicit SQL declaration
+        db.session.execute(text('SELECT 1'))  # <-- ADD text() here
+        return {
+            'status': 'healthy', 
+            'database': 'connected',
+            'service': 'SeenIT'
+        }, 200
     except Exception as e:
-        return {'status': 'unhealthy', 'database': 'disconnected', 'error': str(e)}, 500
+        return {
+            'status': 'unhealthy', 
+            'database': 'disconnected', 
+            'error': str(e)
+        }, 500
     
 # *********************************** FILTER BY CATEGORY **************************************************
 
