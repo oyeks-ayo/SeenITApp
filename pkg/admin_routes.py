@@ -1,5 +1,6 @@
+import logging
 from functools import wraps
-from flask import render_template,request,redirect,url_for,flash,make_response,session
+from flask import Blueprint, render_template,request,redirect,url_for,flash,make_response,session
 from flask_wtf.csrf import CSRFError # type: ignore
 from werkzeug.security import check_password_hash # type: ignore
 from pkg import app,csrf
@@ -8,6 +9,8 @@ from pkg.models import db, Admin, Users, Project
 # from pkg.forms import 
 
 
+admin_bp = Blueprint('admin', __name__, url_prefix='/admin')
+logger = logging.getLogger(__name__)
 # *********************************** LOGIN DECORATOR **************************************************
 
 def login_required(f):
@@ -17,7 +20,7 @@ def login_required(f):
             return f(*args,**kwargs)
         else:
             flash('You need to be logged in before you can visit page', category='error')
-            return redirect(url_for('AdminLogin'))
+            return redirect(url_for('admin.AdminLogin'))
     return login_decorator
 # *********************************** LOGIN DECORATOR **************************************************
 # *********************************** ADMIN LOGIN **************************************************
@@ -37,7 +40,6 @@ def adminlogin():
         print(f"Username: {username}, Password: {pwd}")  # Debugging line
         
         admin = db.session.query(Admin).filter((Admin.email == username) | (Admin.username == username) | (Admin.phone == username)).first()
-        print(f"Admin found: {admin}")  # Debugging line
         if admin:
             # hashed = admin.admin_pwd
             # confirm_pwd = check_password_hash(hashed,pwd)
@@ -46,7 +48,7 @@ def adminlogin():
             session['adminisonline'] = admin.id
             flash(message='Login successful!', category='success')
             print("Redirecting to admin dashboard") 
-            return redirect(url_for('admin_dashboard'))
+            return redirect(url_for('admin.admin_dashboard'))
         else:
             flash(message='Incorrect username or password!', category='error')
     return render_template('admin/admin_login.html',form=form)
@@ -59,12 +61,12 @@ def adminlogin():
 def admin_dashboard():
     if 'admin' not in session:
         flash(message='You must be logged in to access the dashboard!', category='error')
-        return redirect(url_for('adminlogin'))
+        return redirect(url_for('admin.adminlogin'))
     form= AdminLogin()
     admin = db.session.query(Admin).get(session['adminisonline'])
     if not admin:
         flash(message='Admin not found!', category='error')
-        return redirect(url_for('adminlogin'))
+        return redirect(url_for('admin.adminlogin'))
     
     
     # Fetching all users and projects for the admin dashboard
@@ -84,19 +86,19 @@ def admin_dashboard():
             if request.form['action'] == 'delete_user':
                 if not selected_user:
                     flash(message='No user selected!', category='error')
-                    return redirect(url_for('admin_dashboard'))
+                    return redirect(url_for('admin.admin_dashboard'))
                 db.session.delete(selected_user)
                 db.session.commit()
                 flash(message='User deleted successfully!', category='success')
-                return redirect(url_for('admin_dashboard'))
+                return redirect(url_for('admin.admin_dashboard'))
             elif request.form['action'] == 'delete_project':
                 if not selected_project:
                     flash(message='No project selected!', category='error')
-                    return redirect(url_for('admin_dashboard'))
+                    return redirect(url_for('admin.admin_dashboard'))
                 db.session.delete(selected_project)
                 db.session.commit()
                 flash(message='Project deleted successfully!', category='success')
-                return redirect(url_for('admin_dashboard'))
+                return redirect(url_for('admin.admin_dashboard'))
 
     return render_template('admin/admin.html',
                            admin=admin,
@@ -124,6 +126,23 @@ def admin_logout():
     if session.get('adminisonline') != None and session.get('admin') != None:
         session.pop('adminisonline',None)
         session.pop('admin', None)        
-    return redirect(url_for('adminlogin'))
+    return redirect(url_for('admin.adminlogin'))
 
 # *********************************** ADMIN LOGOUT **************************************************
+
+# *********************************** ERROR HANDLERS **************************************************
+@admin_bp.errorhandler(404)
+def admin_not_found(e):
+    logger.error(f"Admin 404 Error: {str(e)}", exc_info=True)
+    return render_template('user/error.html', error=e), 404
+
+@admin_bp.errorhandler(500)
+def admin_server_error(e):
+    logger.error(f"Admin 500 Error: {str(e)}", exc_info=True)
+    return render_template('user/error.html', error=e), 500
+
+@admin_bp.errorhandler(403)
+def admin_forbidden(e):
+    logger.error(f"Admin 403 Error: {str(e)}", exc_info=True)
+    return render_template('user/error.html', error=e), 403
+# *********************************** ERROR HANDLERS **************************************************

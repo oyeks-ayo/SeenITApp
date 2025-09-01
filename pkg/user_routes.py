@@ -1,19 +1,23 @@
+import logging
 from datetime import datetime
 from functools import wraps
 import json
 from sqlalchemy import func # type: ignore
-from flask import render_template,request,redirect,url_for,flash,make_response,session
+from flask import Blueprint,render_template,request,redirect,url_for,flash,make_response,session
 from flask_wtf.csrf import CSRFError, generate_csrf # type: ignore
-from pkg import app,csrf
+from pkg import csrf
 from pkg.models import db,ContactSeenIT, Users,Profile,Skill,Category,Service,State,ProfileService,ProfileSkill,Project
 from pkg.forms import ContactUs,SignUpF, ProfileForm, UserLogin,UserPasswordReset,SeenITHubUpload
 
+# Create blueprint instead of using app directly
+user_bp = Blueprint('user', __name__)
 
+logger = logging.getLogger(__name__)
 # *********************************** HOMEPAGE **************************************************
 
 
 # *********************************** INJECTIONS **************************************************
-@app.context_processor
+@user_bp.context_processor
 def inject_users():
 
 # **************FOR NAVBAR****************
@@ -38,13 +42,13 @@ def inject_users():
 # *********************************** INJECTIONS **************************************************
 
 
-@app.after_request
+@user_bp.after_request
 def after_request(response):
     response.headers['Cache-Control'] = 'no-cache,no-store,must-revalidate'
     return response
 
 
-@app.route('/')
+@user_bp.route('/')
 def home():
     return render_template('users/homepage.html')
 
@@ -52,7 +56,7 @@ def home():
 
 # *********************************** ABOUT US **************************************************
 
-@app.route('/aboutUs/')
+@user_bp.route('/aboutUs/')
 def about_us():
     try:
         # Fetch the total number of users from the database
@@ -60,17 +64,17 @@ def about_us():
         return render_template('users/About_Us.html',users=no_users)
 
     except Exception as e:
-        app.logger.error(f"Something went wrong: {str(e)}", exc_info=True)
+        logger.error(f"Something went wrong: {str(e)}", exc_info=True)
         db.session.rollback()
         flash(f'An error occurred: {e}', 'error')
-        return redirect(url_for('home'))
+        return redirect(url_for('user.home'))
 
 # *********************************** ABOUT US **************************************************
     
     
 # *********************************** SIGN UP **************************************************
 
-@app.route('/signUp/')
+@user_bp.route('/signUp/')
 def signUp():
     form = SignUpF()
     return render_template('users/sign_up.html',form=form)
@@ -79,7 +83,7 @@ def signUp():
 
 # *********************************** LOGIN **************************************************
 
-@app.route('/userlogin/')
+@user_bp.route('/userlogin/')
 def userLogin():
     form = UserLogin()
     return render_template('users/user_login.html',form=form)
@@ -95,17 +99,17 @@ def login_required(f):
             return f(*args,**kwargs)
         else:
             flash('You need to be logged in before you can visit page', category='error')
-            return redirect(url_for('userLogin'))
+            return redirect(url_for('user.userLogin'))
     return login_decorator
 # *********************************** LOGIN DECORATOR **************************************************
 
 # *********************************** USER LOGOUT **************************************************
-@app.route('/user/logout/')
+@user_bp.route('/user/logout/')
 @login_required
 def user_logout():
     if session.get('isonline') != None:
         session.pop('isonline',None)        
-    return redirect(url_for('userLogin'))
+    return redirect(url_for('user.userLogin'))
 # *********************************** USER LOGOUT **************************************************
 
 
@@ -113,7 +117,7 @@ def user_logout():
 
 
 
-@app.get('/contactus/')
+@user_bp.get('/contactus/')
 def contact():
     form = ContactUs()
     return render_template('users/contact_us.html', form=form)
@@ -125,7 +129,7 @@ def contact():
 
 # *********************************** HUB **************************************************
 
-@app.route('/seenIT/hub/project/<int:project_id>', methods=['GET'])
+@user_bp.route('/seenIT/hub/project/<int:project_id>', methods=['GET'])
 @login_required
 def seenITHubProject(project_id):
     try:
@@ -140,13 +144,13 @@ def seenITHubProject(project_id):
         )
     except CSRFError as e:
         flash(f'CSRF Error: {e}', 'error')
-        return redirect(url_for('seenITHub'))
+        return redirect(url_for('user.seenITHub'))
     
 # *********************************** HUB **************************************************
 
 
 # *********************************** SEENIT HUB PAGE **************************************************
-@app.route('/seenIT/hub/', methods=['GET'])
+@user_bp.route('/seenIT/hub/', methods=['GET'])
 @login_required
 def seenITHub():
 
@@ -186,7 +190,7 @@ def seenITHub():
             user_projects=profile.projects if profile else [])
     except CSRFError as e:
         flash(f'CSRF Error: {e}', 'error')
-        return redirect(url_for('seenITHub'))
+        return redirect(url_for('user.seenITHub'))
                  
 
 # *********************************** SEENIT HUB PAGE **************************************************
@@ -195,7 +199,7 @@ def seenITHub():
 
 
 # *********************************** SEENIT HUB PAGE CATEGORY SEARCH**************************************************
-@app.route('/category/filter/')
+@user_bp.route('/category/filter/')
 @login_required
 def category_filter():
     try:
@@ -215,17 +219,17 @@ def category_filter():
         
         return data2send
     except Exception as e:
-        app.logger.error(f"Error in category_filter: {str(e)}", exc_info=True)
+        logger.error(f"Error in category_filter: {str(e)}", exc_info=True)
         flash('An error occurred while filtering projects.', 'error')
         return redirect(url_for('seenITHub'))
     except CSRFError as e:
         flash(f'CSRF Error: {e}', 'error')
-        return redirect(url_for('seenITHub'))
+        return redirect(url_for('user.seenITHub'))
 
 
 
 # *********************************** PROFILE PAGE **************************************************
-@app.route('/profile/page/<int:id>/')
+@user_bp.route('/profile/page/<int:id>/')
 @login_required
 def profile_page(id):
 
@@ -298,17 +302,17 @@ def profile_page(id):
                                                         projects=projects)
     except CSRFError as e:
         flash(f'CSRF Error: Token error', 'error')
-        return redirect(url_for('seenITHub'))
+        return redirect(url_for('user.seenITHub'))
     except Exception as e:
-        app.logger.error(f"Something went wrong: {str(e)}", exc_info=True)
+        logger.error(f"Something went wrong: {str(e)}", exc_info=True)
         db.session.rollback()
         flash(f'An error occurred: {e}', 'error')
-        return redirect(url_for('profile_page'))
+        return redirect(url_for('user.profile_page',id=id))
 
 # *********************************** PROFILE PAGE **************************************************
 
 # *********************************** PROFILE FORM **************************************************
-@app.route('/profileform/<int:id>/')
+@user_bp.route('/profileform/<int:id>/')
 @login_required
 def profile_form(id):
 
@@ -344,12 +348,12 @@ def profile_form(id):
                                                     profile=profile)
     except CSRFError as e:
         flash(f'CSRF Error: {e}', 'error')
-        return redirect(url_for('profile_page', id=id))
+        return redirect(url_for('user.profile_page', id=id))
     except Exception as e:
-        app.logger.error(f"Something went wrong: {str(e)}", exc_info=True)
+        logger.error(f"Something went wrong: {str(e)}", exc_info=True)
         db.session.rollback()
         flash(f'An error occurred: {e}', 'error')
-        return redirect(url_for('profile_page', id=id))
+        return redirect(url_for('user.profile_page', id=id))
                                                     
 
   
@@ -359,7 +363,7 @@ def profile_form(id):
 # *********************************** TIME FUNCTION **************************************************
 
 
-@app.template_filter('time_ago')
+@user_bp.template_filter('time_ago')
 def time_ago_filter(dt):
     now = datetime.utcnow()
     diff = now - dt
@@ -384,7 +388,7 @@ def time_ago_filter(dt):
 # *********************************** TIME FUNCTION **************************************************
 
 # *********************************** ALL PROJECTS **************************************************
-@app.route('/all/projects/<int:id>/')
+@user_bp.route('/all/projects/<int:id>/')
 @login_required
 def all_projects(id):
     user = Users.query.get_or_404(id)
@@ -400,7 +404,7 @@ def all_projects(id):
 # *********************************** ALL PROJECTS **************************************************
 
 # *********************************** A SINGLE PROJECT'S PAGE **************************************************
-@app.route('/project/<int:id>/<title>/<profile_id>/')
+@user_bp.route('/project/<int:id>/<title>/<profile_id>/')
 @login_required
 def project(id, title, profile_id):
     print(title)
@@ -418,7 +422,7 @@ def project(id, title, profile_id):
 
 
 # *********************************** PROFILE PAGE OF ANOTHER **************************************************
-@app.route('/profile/another/')
+@user_bp.route('/profile/another/')
 @login_required
 def profileAnother():
     return render_template('users/profile_page_of_another.html')
@@ -427,7 +431,7 @@ def profileAnother():
 
 
 # *********************************** USER PASSWORD RESET **************************************************
-@app.route('/user/reset/')
+@user_bp.route('/user/reset/')
 @login_required
 def userresetpwd():
     form = UserPasswordReset()
@@ -437,7 +441,7 @@ def userresetpwd():
 
 # *********************************** USER SEARCH **************************************************
 
-@app.route('/user/search/', methods=['GET', 'POST'])
+@user_bp.route('/user/search/', methods=['GET', 'POST'])
 @login_required
 def user_search():
     u_id = session.get('isonline')
@@ -447,10 +451,10 @@ def user_search():
 
         if request.method == 'POST':
             search_query = request.form.get('search_query', '').strip()
-            app.logger.info(f"Search query: {search_query}")
+            logger.info(f"Search query: {search_query}")
             if not search_query:
                 flash('Please enter a search term.', 'error')
-                return redirect(url_for('user_search'))
+                return redirect(url_for('user.user_search'))
 
             # Search for users based on fname, lname, or username
             users = db.session.query(Users)\
@@ -465,7 +469,7 @@ def user_search():
 
             if not users:
                 flash('No users found matching your search criteria.', 'info')
-                return redirect(url_for('user_search'))
+                return redirect(url_for('user.user_search'))
 
             return render_template('users/searchpage.html',
                                   users=users,
@@ -479,31 +483,31 @@ def user_search():
                               current_project=project)
 
     except Exception as e:
-        app.logger.error(f"Error in user_search: {str(e)}", exc_info=True)
+        logger.error(f"Error in user_search: {str(e)}", exc_info=True)
         flash('An error occurred while searching.', 'error')
-        return redirect(url_for('user_search'))
+        return redirect(url_for('user.user_search'))
 # *********************************** USER SEARCH **************************************************
 
 # *********************************** ERROR PAGES **************************************************
 
-@app.errorhandler(404)
+@user_bp.errorhandler(404)
 def page_not_found(e):
     # Log the error details
-    app.logger.error(f"404 Error: {str(e)}", exc_info=True)
+    logger.error(f"404 Error: {str(e)}", exc_info=True)
     # Return a custom 404 error page
     return render_template('users/errorpage.html', error404=e), 404
 
-@app.errorhandler(500)
+@user_bp.errorhandler(500)
 def internal_server_error(e):
     # Log the error details
-    app.logger.error(f"500 Error: {str(e)}", exc_info=True)
+    logger.error(f"500 Error: {str(e)}", exc_info=True)
     # Return a custom 500 error page
     return render_template('users/errorpage.html', error500=e), 500
 
-@app.errorhandler(403)
+@user_bp.errorhandler(403)
 def forbidden(e):
     # Log the error details
-    app.logger.error(f"403 Error: {str(e)}", exc_info=True)
+    logger.error(f"403 Error: {str(e)}", exc_info=True)
     # Return a custom 403 error page
     return render_template('users/errorpage.html', error403=e), 403
 
@@ -512,7 +516,7 @@ def forbidden(e):
 
 # *********************************** FILTER BY CATEGORY **************************************************
 
-@app.route('/filter/category/<int:category_id>/', methods=['GET'])
+@user_bp.route('/filter/category/<int:category_id>/', methods=['GET'])
 @login_required
 def filter_by_category(category_id):
     try:
@@ -528,16 +532,16 @@ def filter_by_category(category_id):
         
         if not users:
             flash('No users found in this category.', 'info')
-            return redirect(url_for('seenITHub'))
+            return redirect(url_for('user.seenITHub'))
 
         return render_template('users/filter_by_category.html', 
                                users=users, 
                                category=category)
 
     except Exception as e:
-        app.logger.error(f"Error filtering by category: {str(e)}", exc_info=True)
+        logger.error(f"Error filtering by category: {str(e)}", exc_info=True)
         flash('An error occurred while filtering by category.', 'error')
-        return redirect(url_for('seenITHub'))
+        return redirect(url_for('user.seenITHub'))
 
 # *********************************** FILTER BY CATEGORY **************************************************
 
