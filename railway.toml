@@ -2,10 +2,9 @@
 [build]
 builder = "nixpacks"
 
+# railway.toml
 [deploy]
-startCommand = "gunicorn --bind 0.0.0.0:$PORT --timeout 120 --workers 2 --threads 4 wsgi:app"
-restartPolicyType = "ON_FAILURE"
-restartPolicyMaxRetries = 10
+startCommand = "python -c 'from test_railway_db import test_railway_connection; test_railway_connection()' && gunicorn --bind 0.0.0.0:$PORT --timeout 120 --workers 1 wsgi:app"
 
 [[services]]
 name = "web"

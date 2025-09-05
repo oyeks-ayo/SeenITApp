@@ -28,9 +28,10 @@
 
 # In your main app file
 # pkg/__init__.py
+# pkg/__init__.py
 import os
 import logging
-from flask import Flask
+from flask import Flask, jsonify
 from flask_wtf import CSRFProtect
 from flask_migrate import Migrate
 from dotenv import load_dotenv
@@ -48,7 +49,6 @@ def create_app():
     # Configure logging
     logging.basicConfig(level=logging.WARNING)
     logging.getLogger('sqlalchemy.engine').setLevel(logging.ERROR)
-    logging.getLogger('sqlalchemy.pool').setLevel(logging.ERROR)
 
     # Initialize extensions
     from .models import db
@@ -65,9 +65,39 @@ def create_app():
     app.register_blueprint(admin_bp)
     app.register_blueprint(db_bp)
 
+    # Add health check endpoint
+    @app.route('/health')
+    def health_check():
+        try:
+            # Simple test without database
+            return jsonify({
+                'status': 'ok',
+                'message': 'App is running (database status unknown)'
+            })
+        except Exception as e:
+            return jsonify({
+                'status': 'error',
+                'message': str(e)
+            }), 500
+
+    # Add database test endpoint
+    @app.route('/test-db')
+    def test_db():
+        try:
+            # Try a simple database operation
+            result = db.session.execute('SELECT 1')
+            return jsonify({
+                'status': 'connected',
+                'message': 'Database is accessible'
+            })
+        except Exception as e:
+            return jsonify({
+                'status': 'disconnected',
+                'message': f'Database error: {str(e)}'
+            }), 500
+
     return app
 
-# Create the app instance
 app = create_app()
 # REMOVE THESE IMPORTS - they cause circular imports
 # from pkg import forms, user_routes, admin_routes, dbroutes
