@@ -26,6 +26,7 @@
 
 # app = create_app()
 
+# In your main app file
 import os
 import logging
 from flask import Flask
@@ -33,6 +34,7 @@ from flask_wtf import CSRFProtect
 from flask_migrate import Migrate
 from dotenv import load_dotenv
 from pkg.config import Appconfig
+from pkg.database import wait_for_database
 
 csrf = CSRFProtect()
 
@@ -43,24 +45,19 @@ def create_app():
     app.config['SECRET_KEY'] = os.getenv("SECRET_KEY")
     app.config.from_pyfile('config.py', silent=True)
     
-    # Add SQLAlchemy connection pooling configuration
-    app.config['SQLALCHEMY_ENGINE_OPTIONS'] = {
-        'pool_size': 5,
-        'max_overflow': 10,
-        'pool_timeout': 30,
-        'pool_recycle': 1800,
-        'pool_pre_ping': True
-    }
-    
-    # Reduce SQLAlchemy logging
-    logging.getLogger('sqlalchemy.engine').setLevel(logging.WARNING)
-    logging.getLogger('sqlalchemy.pool').setLevel(logging.WARNING)
+    # Configure logging first
+    logging.basicConfig(level=logging.WARNING)
+    logging.getLogger('sqlalchemy.engine').setLevel(logging.ERROR)
+    logging.getLogger('sqlalchemy.pool').setLevel(logging.ERROR)
 
     # Initialize extensions
     from pkg.models import db
     db.init_app(app)
     csrf.init_app(app)
     migrate = Migrate(app, db)
+
+    # Wait for database without spamming
+    wait_for_database(app)
 
     # Register blueprints
     from pkg.user_routes import user_bp
