@@ -27,14 +27,14 @@
 # app = create_app()
 
 # In your main app file
+# pkg/__init__.py
 import os
 import logging
 from flask import Flask
 from flask_wtf import CSRFProtect
 from flask_migrate import Migrate
 from dotenv import load_dotenv
-from pkg.config import Appconfig
-from pkg.database import wait_for_database
+from .config import Appconfig
 
 csrf = CSRFProtect()
 
@@ -45,24 +45,21 @@ def create_app():
     app.config['SECRET_KEY'] = os.getenv("SECRET_KEY")
     app.config.from_pyfile('config.py', silent=True)
     
-    # Configure logging first
+    # Configure logging
     logging.basicConfig(level=logging.WARNING)
     logging.getLogger('sqlalchemy.engine').setLevel(logging.ERROR)
     logging.getLogger('sqlalchemy.pool').setLevel(logging.ERROR)
 
     # Initialize extensions
-    from pkg.models import db
+    from .models import db
     db.init_app(app)
     csrf.init_app(app)
     migrate = Migrate(app, db)
 
-    # Wait for database without spamming
-    wait_for_database(app)
-
     # Register blueprints
-    from pkg.user_routes import user_bp
-    from pkg.admin_routes import admin_bp
-    from pkg.db_routes import db_bp
+    from .user_routes import user_bp
+    from .admin_routes import admin_bp
+    from .db_routes import db_bp
     
     app.register_blueprint(user_bp)
     app.register_blueprint(admin_bp)
@@ -70,6 +67,7 @@ def create_app():
 
     return app
 
+# Create the app instance
 app = create_app()
 # REMOVE THESE IMPORTS - they cause circular imports
 # from pkg import forms, user_routes, admin_routes, dbroutes
