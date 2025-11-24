@@ -1,0 +1,29 @@
+services:
+  # Web Service
+  - type: web
+    name: seenit-app
+    runtime: python
+    region: oregon
+    plan: free
+    branch: main
+    buildCommand: pip install -r requirements.txt
+    startCommand: gunicorn starter:app
+    envVars:
+      - key: PYTHON_VERSION
+        value: 3.13.0
+      - key: SECRET_KEY
+        generateValue: true
+      - key: SQLALCHEMY_DATABASE_URI
+        fromDatabase:
+          name: seenit-db
+          property: connectionString
+    autoDeploy: true
+
+databases:
+  # PostgreSQL Database
+  - name: seenit-db
+    databaseName: seenITApp
+    user: seenit_user
+    region: oregon
+    plan: free
+    ipAllowList: []
