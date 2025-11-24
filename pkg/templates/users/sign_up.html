@@ -1,0 +1,230 @@
+{% extends 'format.html' %}
+
+	{% block description %}
+	<meta name="description" content="Sign up for seenIT to showcase your talent, promote your work, and connect with new opportunities. Create your free profile today.">
+	{% endblock %}
+			
+	{% block keywords %}
+	<meta name="keywords" content="seenIT, promote work, showcase talent, social networking, personal branding, online portfolio, connect with clients, advertise services, grow business, creative platform">
+	{% endblock %}
+
+	{% block title %}
+	<title>seenIT : Sign Up – Promote Your Work & Grow Your Network</title>
+	{% endblock %}
+
+	{% block style %}
+	<style>
+
+		.nba{color: ghostwhite;
+		}
+
+
+		.bigbody {
+			min-height: auto;
+			background-color: #4B4B4B;
+
+		}
+
+		.backCol {
+			color:#4b4b4b;
+			min-height: inherit;
+		}
+
+		.backWhite {
+			background-color: rgb(220, 220, 227);
+			min-height: 500px;
+		}
+
+		.signUp {
+			color: #007aff; 
+			margin:60px 50px; 
+			font-weight: 400; 
+			font-size: 20px;
+			font-family: Open Sans, sans-serif;
+		}
+
+		.fontInter {
+				font-family: 'Inter', sans-serif;
+		}
+
+		.fontOpen {
+			font-family: Open Sans, sans-serif;
+		}
+
+		.fontPoppins {
+				font-family:Poppins, sans-serif;
+		}
+
+		</style>
+	{% endblock %}
+
+{% block content %}
+<div class="backCol">
+	<!--========================== Contents Starts Here ==============================-->
+	
+						<div class="backWhite mt-5">
+							<div class="row justify-content-evenly" >
+								<div class="col-lg-5 col-md-6 col-9-xl">
+									<h1>Create Your Account</h1>
+									<p class="">Join seenIT and start showcasing your talent today.</p>
+									<p class="">It’s quick, easy, and free!</p>
+	
+									<div class="mt-3 info">
+										{#{% with messages = get_flashed_messages(with_categories=True) %}
+											{% for category, message in messages %}
+												{% if message %}
+													<h5 class="alert alert-{{category}}">{{message}}</h5>
+												{% endif %}
+											{% endfor %}
+										{% endwith %}#}
+
+
+									</div>
+	
+	<!--========================= Form Starts Here Here  ===========================-->								
+									<div style="background-color: rgba(0, 0, 0, 0.1); min-height: 400px; padding-top: 50px;" class="me-2 mt-5 fontOpen">
+	
+										<form class="row mt-3 rounded justify-content-center" action="" method="post" id="signupform" novalidate>
+												{{form.csrf_token}}
+											<div class="col-11 mb-3 form-floating">
+												{{form.fname(class_='form-control', placeholder='First Name')}}
+												{{form.fname.label}}
+											</div>
+										
+											<div class="col-11 mb-3 form-floating">
+												{{form.lname(class_='form-control', placeholder='Last Name')}}
+												{{form.lname.label}}
+											</div>
+	
+											<div class="col-11 mb-3 form-floating">
+												{{form.mname(class_='form-control', placeholder='Middle Name')}}
+												{{form.mname.label}}
+											</div>
+	
+											<div class="col-11 mb-3 form-floating">
+												{{form.username(class_='form-control', placeholder='Username')}}
+												{{form.username.label}}
+												<span class="form-floating" id="exist1"></span>
+											</div>
+	
+											<div class="col-11 mb-3 form-floating">
+												{{form.email(class_='form-control', placeholder='Email')}}
+												{{form.email.label}}
+												<span class="form-floating" id="exist2"></span>
+											</div>
+										
+											<div class="col-11 mb-3 form-floating">
+												{{form.phone(class_='form-control', placeholder='Phone Number')}}
+												{{form.phone.label}}
+												<span class="form-floating" id="exist3"></span>
+											</div>
+	
+											<div class="col-11 mb-3 form-floating">
+												{{form.password(class_='form-control', placeholder='Password')}}
+												{{form.password.label}}
+											</div>
+	
+											<div class="col-11 mb-3 form-floating">
+												{{form.cpassword(class_='form-control', placeholder='Confirm Password')}}
+												{{form.cpassword.label}}
+											</div>
+	
+											<div class="col-11 mb-3 d-flex">
+												{{form.terms(class_='form-check me-2')}} 
+												{{form.terms.label}}
+											</div>
+	
+											<div class="col-11 mb-3">
+												{{form.submit(class_='btn btn-warning', id = 'btn')}} 
+											</div>
+	
+										</form>
+									</div>
+	<!--=========================== Form Ends Here  =============================-->
+	
+	<!--======================== Sign Up Image Starts Here  ==========================-->
+								</div>
+								<div class="col-md-6 mt-5">
+									<img class="img-fluid h-100 d-none d-md-block" src="/static/sign_up_pics/sign_up.jpeg" alt="a picture of a young girl">
+								</div>
+							</div>
+	<!--======================== Sign Up Image Ends Here  ==========================-->
+	
+	<!--======================== Have An Accout Starts Here  =========================-->					
+							<div class="row">
+								<div class="col ms-5 mb-3">
+									<h3 class="text-primary">Already have an account? <a class="btn btn-primary fw-bold" href="{{url_for('userLogin')}}">Login</a></h3>
+								</div>
+							</div>
+	<!--======================== Have An Accout ends Here  =========================-->						
+						</div>
+	<!--===================== Background Color White End Here  =======================-->
+	
+	<!--=================== Creat Account Contents Ends Here =======================-->
+	
+			</div>
+		</div>
+
+		<script src="/static/jquery-3.7.1.min.js"></script>
+		<script>
+			$(document).ready(function(){
+				$('#btn').click(function(event){
+					event.preventDefault();
+
+					var form_data = $('#signupform').serialize()
+
+					$.ajax({
+						url:'/signup/submit/',
+						type:'post',
+						data: form_data,
+						dataType: 'json',
+						error:function(rsp){
+							console.log(rsp)
+						},
+
+						success: function(rsp){
+							$('.info').removeClass('alert alert-danger alert-success')
+							$('.is-invalid').click(function () {
+								$(this).removeClass('is-invalid')
+							})
+
+							if (rsp.status == 'success'){
+								$('.info').addClass('alert alert-success')
+								$('.info').html(rsp.message)
+								$('.form-control').val('') //TO CLEAR THE FIELDS AFTER SUBMISSION
+							} else if (rsp.status == 'username') {
+								$('#exist1').addClass('text-danger')
+								$('#exist1').html(rsp.message)
+								$('#exist1').addClass('is-invalid')
+						
+							} else if (rsp.status == 'email') {
+								$('#exist2').addClass('text-danger')
+								$('#exist2').html(rsp.message)
+								$('#exist2').addClass('is-invalid')
+								
+							} else if (rsp.status == 'phone') {
+								$('#exist3').addClass('text-danger')
+								$('#exist3').html(rsp.message)
+								$('#exist3').addClass('is-invalid')
+							} 
+							else{
+								$('.info').addClass('alert alert-danger')
+								$('.info').html(rsp.message)
+							}
+
+							
+						},
+
+						beforeSend: function(){
+							$('#info').html('<div class = "spinner-border text-warning ><span>Signing You Up. . .</span></div>')
+						},
+						complete: function(){
+							$('#btn').html('Welcome to SeenIT')
+						}
+					})
+				})
+			})
+		</script>
+{% endblock %}
+
+	

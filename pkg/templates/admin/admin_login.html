@@ -1,0 +1,151 @@
+{% extends 'format.html' %}
+
+	{% block title %}
+<title>Login – Promote Your Work & Grow Your Network</title>
+	{% endblock %}
+
+<!--========================== Styles starts Here ================================-->
+
+	{% block style %}
+	<style>
+
+		.nba{
+			background-color:ghostwhite;
+			color: #172436;
+		}
+	
+	
+		.bigbody {
+	
+			min-height: 800px;
+			background-color: ghostwhite;
+	
+		}
+	
+		.backCol {
+			background-color:#007aff;
+			min-height: inherit;
+	
+		}
+	
+		.backWhite {
+			background-color: ghostwhite;
+			min-height: 200px;
+			
+		}
+	
+		.backImg{
+			background-image: url('/static/login_pics/admin.jpg');
+			background-size: contain;
+			background-position:center ;
+			background-repeat: no-repeat;
+			min-height: 800px;
+	
+		}
+	
+		.banner {
+			background-color: #fff9;
+		}
+	
+	
+		.fontInter {
+				font-family: 'Inter', sans-serif;
+				color:ghostwhite;
+		}
+	
+		.fontOpen {
+			font-family: Open Sans, sans-serif;
+			color:ghostwhite;
+			font-size: 27px;
+			/*background-color: rgba(150, 150, 150, 0.2);*/
+		}
+	
+		.fontPoppins {
+				font-family:Poppins, sans-serif;
+				
+		}
+	
+		</style>
+	<!--========================== Styles ends Here ==================================-->
+	{% endblock %}
+
+{% block content %}
+<!--======================= Background Color Starts Here ==========================-->
+<div class="backWhite">
+	<!--====================== Background Image Starts Here ==========================-->					<div class = "backImg">
+	<!--====================== Welcome Back Starts Here ==========================-->
+							<div class="fontOpen banner" style="color: #49494B;">
+								<h2>Welcome Back to <a class="badge" href="/" style="text-decoration: none; background-color:black;">seenIT</a></h2>
+								<p>Log in to manage accounts</p>
+	
+								 <a href="/userlogin/" class="badge text-bg-dark text-light" style="text-decoration: none;">Login as user</a>
+							</div>
+	<!--======================== Welcome Back Ends Here ==============================-->
+	<!--========================= Login Form Starts Here =============================-->
+							<div class="mt-5 mx-5 me-5 mt-5 fontOpen">
+									<div class="col-md-6" style="background-color: rgba(0, 0, 0, 0.3);min-height: 400px; padding: 10px; align-content: center; border-radius: 30px;">
+										<div>
+											{% with messages = get_flashed_messages(with_categories=True) %}
+												{% if messages %}
+													{% for cat, msg in messages %}
+														{% if cat == 'error' %}
+															<p class="alert alert-danger">{{ msg }}</p>
+														{% else %}
+															<p class="alert alert-success">{{ msg }}</p>
+														{% endif %}
+													{% endfor %}
+												{% endif %}
+											{% endwith %}
+											</div>
+
+											<form action="{{ url_for('adminlogin') }}" method="post">
+												{{ form.hidden_tag() }} <!-- Includes CSRF token -->
+									
+												<div class="col-12 mb-3">
+													{{ form.uname(class_='form-control', placeholder='Username/Phone/Email') }}
+													{{ form.uname.label(class_='form-label text-light') }}
+												</div>
+									
+												<div class="col-12 mb-3">
+													{{ form.password(class_='form-control', placeholder='Password') }}
+													{{ form.password.label(class_='form-label text-light') }}
+												</div>
+									
+												<div class="row">
+													<div class="col-6 mb-3">
+														{{ form.login(class_='btn btn-warning btn-lg text-light', type='submit') }}
+													</div>
+													<div class="col-6 mt-2">
+														<a class="text-decoration-none text-light" href="/admin/reset/">Forget password?</a>
+													</div>
+												</div>
+									
+												<div class="col-12 d-flex mt-2 align-items-center">
+													{{ form.remember(class_='form-check-input') }}
+													{{ form.remember.label(class_='form-check-label text-light ms-2') }}
+												</div>
+											</form>
+										</div>
+									</div>
+	<!--========================= Login Form Ends Here ===============================-->
+	<!--==================== Don't Have An Account Starts Here =======================-->
+								<div style="margin-top: 170px;
+											text-align: center; 
+											color:#49494B;"
+									class="banner">
+									<h2> Don't have an account?</h2>
+									<p><a class="badge text-bg-dark" style="text-decoration: none;" href="/signUp/">Sign Up here</a> and start showcasing your talent!</p>
+								</div>
+	
+	<!--==================== Don't Have An Account Ends Here =========================-->
+						</div>
+	<!--======================= Background Image Ends Here ==========================-->	
+					</div>
+	
+	<!--======================= Background Color Ends Here ==========================-->
+{% endblock %}
+
+
+
+
+
