@@ -14,7 +14,7 @@ from pkg.forms import ContactUs, SignUpF, UserLogin, AdminLogin,ProfileForm
 
 @app.route('/signup/submit/',methods=['POST'])
 def signup_db():
-   
+
 
     fname = request.form.get('fname')
     lname = request.form.get('lname')
@@ -36,7 +36,7 @@ def signup_db():
             elif terms != 'y':
                 data2return = {'status':'danger', 'message':'Kindly agree to terms'}
                 return json.dumps(data2return)
-            elif check: 
+            elif check:
                 if check.username == username:
                     data2return = {'status':'username', 'message':'Username already taken!'}
                     return json.dumps(data2return)
@@ -49,13 +49,13 @@ def signup_db():
             else:
                 terms='Agreed'
                 hashed_pwd = generate_password_hash(pwd)
-                insert_to_db = Users(fname=fname, 
-                                    lname=lname, 
-                                    mname=mname, 
-                                    username=username, 
-                                    email=email, 
-                                    phone=phone, 
-                                    user_pwd=hashed_pwd, 
+                insert_to_db = Users(fname=fname,
+                                    lname=lname,
+                                    mname=mname,
+                                    username=username,
+                                    email=email,
+                                    phone=phone,
+                                    user_pwd=hashed_pwd,
                                     terms=terms)
                 db.session.add(insert_to_db)
                 db.session.commit()
@@ -158,9 +158,8 @@ def profile_update(id):
         services = request.form.getlist('service_type')
         skills = request.form.getlist('skill_set')
 
-        
 
-        
+
         format = ['.jpg', '.png', '.jpeg', '.webp']
 
         if profile_pix and profile_pix.filename:
@@ -192,7 +191,7 @@ def profile_update(id):
             if state == '0':
                 data2send = {'status':'state','msg':'You need to pick your state of residence'}
                 return jsonify(data2send)
-            
+
             elif category == '0':
                 data2send = {'status':'category','msg':'You need to pick a category'}
                 return jsonify(data2send)
@@ -214,13 +213,13 @@ def profile_update(id):
                 )
                 db.session.add(profile)
                 db.session.commit()
-                
+
         else:
 
             user.fname = fname.upper()
             user.lname = lname.upper()
 
-            if mname:                         
+            if mname:
                 user.mname = mname.upper()
 
             if not username:
@@ -246,19 +245,21 @@ def profile_update(id):
                     return jsonify(data2send)
                 else:
                     user.phone = phone
-            
+
             profile = user.profile
 
-            if dob == '':
+            if not dob:
                 dob = None
-            elif dob:
+                if not profile.dob:
+                    profile.dob = dob
+            elif dob and dob.strip():
                 dob = datetime.strptime(dob, '%Y-%m-%d')
                 profile.dob = dob
 
             if not gender:
                 data2send = {'status':'gender', 'msg':'Please select your gender'}
                 return jsonify(data2send)
-    
+
             profile.gender = gender
             profile.address1 = address1
             profile.address2 = address2
@@ -267,46 +268,84 @@ def profile_update(id):
             profile.social_media = social_m
             profile.blog = web_blog
 
-            if state == '0':
+            if state and state != '0':
+                profile.state_id = int(state)
+            else:
                 data2send = {'status':'state','msg':'You need to pick your state of residence'}
                 return jsonify(data2send)
-            else:
-                profile.state_id = int(state)
 
-            if category == '0':
+            if category and category != '0':
+                profile.category_id = int(category)
+            elif category == "0" and profile.category_id:
+                pass
+            else:
                 data2send = {'status':'category','msg':'You need to pick your category'}
                 return jsonify(data2send)
-            else:
-                profile.category_id = int(category)
-                    
 
-            if db_profile_pix_name is not None: 
+            if db_profile_pix_name is not None:
                 profile.profile_pix = db_profile_pix_name
             if db_cover_pix_name is not None:
                 profile.cover_pix = db_cover_pix_name
 
+            current_services = {
+                ps.service_id for ps in ProfileService.query
+                    .filter_by(profile_id=profile.id)
+                    .with_entities(ProfileService.service_id)
+                    .all()
+            }
 
-            if services:
+            # Convert submitted ones to a set of integers
+            submitted_set = {int(sid) for sid in services}
+
+            # Compare: did they actually change anything?
+            if submitted_set != current_services:
+                # Yes → user changed services → delete old and save new
                 ProfileService.query.filter_by(profile_id=profile.id).delete()
-                for service_id in services:
-                    pSe = ProfileService(profile_id=profile.id,service_id=int(service_id))
-                    db.session.add(pSe)
-                    db.session.commit()
-                    
-            else:
-                data2send = {'status':'services','msg':'You need to pick at least one service'}
-                return jsonify(data2send)
 
-            if skills:
-                ProfileSkill.query.filter_by(profile_id=profile.id).delete()
-                for skill_id in skills:
-                    pSk = ProfileSkill(profile_id=profile.id,skill_id=int(skill_id))
-                    db.session.add(pSk)
-                    db.session.commit()
-                    
+                if not services:
+                    # User unchecked all → we allow it (services become empty)
+                    pass
+                else:
+                    for service_id in services:
+                        db.session.add(ProfileService(
+                            profile_id=profile.id,
+                            service_id=int(service_id)
+                        ))
             else:
-                data2send = {'status':'skills','msg':'You need to pick at least one skill'}
-                return jsonify(data2send)
+                # No change in services → do NOTHING with ProfileService table
+                pass
+
+            db.session.commit()
+
+            # Get what is currently saved in the DB
+            current_skills = {
+                ps.skill_id for ps in ProfileSkill.query
+                    .filter_by(profile_id=profile.id)
+                    .with_entities(ProfileSkill.skill_id)
+                    .all()
+            }
+
+            # Convert submitted ones to a set of integers
+            submitted_set = {int(sid) for sid in skills}
+
+            # Compare: did they actually change anything?
+            if submitted_set != current_skills:
+                # Yes → user changed services → delete old and save new
+                ProfileSkill.query.filter_by(profile_id=profile.id).delete()
+
+                if not skills:
+                    # User unchecked all → we allow it (services become empty)
+                    pass
+                else:
+                    for skill_id in skills:
+                        db.session.add(ProfileSkill(
+                            profile_id=profile.id,
+                            skill_id=int(skill_id)
+                        ))
+            else:
+                # No change in services → do NOTHING with ProfileService table
+                pass
+            db.session.commit()
 
         db.session.commit()
 
@@ -315,9 +354,9 @@ def profile_update(id):
     except Exception as e:
         db.session.rollback()
         return jsonify({'status':'error', 'msg':f'An error occurred: {str(e)}'})
-    
 
-        
+
+
 
 
 
@@ -328,7 +367,7 @@ def profile_update(id):
 @app.route('/seenIT/hub/db/', methods=['POST'])
 @login_required
 def seenITHub_db():
-    
+
     user_id = session.get('isonline')
 
     user = Users.query.get(user_id)
@@ -338,24 +377,24 @@ def seenITHub_db():
     title = request.form.get('title')
     description = request.form.get('description')
     projects = request.files.getlist('projects')
-    
+
     print(profile)
     print(projects)
 
     if not profile:
         return jsonify({'status':'None', "msg":"You need to create your profile first","redirect":url_for('profile_form')})
-    
+
     if not title:
         return jsonify({'status':'empty', "msg":"Title is required!"})
-    
+
     if not projects or projects[0].filename =='':
         return jsonify({'status':'empty', "msg":"You need to upload a project!"})
-    
+
     pix_format = ['.jpg', '.jpeg', '.png', '.webp', '.gif']
     video_format = ['.mp4', '.mov', '.webm']
 
     processed_files = False
-    
+
     db_project = None
 
     for media in projects:
@@ -378,20 +417,20 @@ def seenITHub_db():
 
         else:
             continue
-        
+
         if db_project:
             newP = Project(
             user_id = user_id,
             title=title,
             description=description,
-            profile_id=profile.id 
+            profile_id=profile.id
         )
 
             db.session.add(newP)
             db.session.commit()
 
-            newM = ProjectMedia(project_id=newP.project_id, 
-                                file_type=file_type, 
+            newM = ProjectMedia(project_id=newP.project_id,
+                                file_type=file_type,
                                 filename=db_project
                                 )
             db.session.add(newM)
@@ -403,7 +442,7 @@ def seenITHub_db():
         return jsonify({'status':'success', "msg":"All files processed successfully!"})
     else:
         return jsonify({'status':'empty', "msg":"No valid files were uploaded!"})
-    
+
 
 # *********************************** SEENIT HUB PROJECT TO DB **************************************************
 
@@ -422,7 +461,7 @@ def contact_submit():
             contact_db = ContactSeenIT(fname=fname, lname=lname, email=email, message=message)
             db.session.add(contact_db)
             db.session.commit()
-            id =contact_db.contact_id
+            id = contact_db.contact_id
 
             if id:
                 data2return = {'status':'success', 'message': 'You have been added to our list'}

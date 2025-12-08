@@ -3,7 +3,7 @@ from datetime import datetime
 from functools import wraps
 import json
 from sqlalchemy import func # type: ignore
-from flask import render_template,request,redirect,url_for,flash,make_response,session
+from flask import render_template,request,redirect,url_for,flash,make_response,session,current_app
 from flask_wtf.csrf import CSRFError, generate_csrf # type: ignore
 from pkg import app,csrf
 from pkg.models import db,ContactSeenIT, Users,Profile,Skill,Category,Service,State,ProfileService,ProfileSkill,Project,ProjectMedia
@@ -68,8 +68,8 @@ def about_us():
         return redirect(url_for('home'))
 
 # *********************************** ABOUT US **************************************************
-    
-    
+
+
 # *********************************** SIGN UP **************************************************
 
 @app.route('/signUp/')
@@ -106,7 +106,7 @@ def login_required(f):
 @login_required
 def user_logout():
     if session.get('isonline') != None:
-        session.pop('isonline',None)        
+        session.pop('isonline',None)
     return redirect(url_for('userLogin'))
 # *********************************** USER LOGOUT **************************************************
 
@@ -143,7 +143,7 @@ def seenITHubProject(project_id):
     except CSRFError as e:
         flash(f'CSRF Error: {e}', 'error')
         return redirect(url_for('seenITHub'))
-    
+
 # *********************************** HUB **************************************************
 
 
@@ -163,8 +163,8 @@ def seenITHub():
         services = Service.query.order_by(Service.name).all()
         categories = Category.query.order_by(Category.name).all()
         states = State.query.order_by(State.name).all()
-        profile_pix = profile.profile_pix if profile else None
-        cover_pix = profile.cover_pix if profile else None
+        profile_pix = profile.profile_pix if profile else 'avatar.png'
+        cover_pix = profile.cover_pix if profile else 'avatar.png'
 
         for pro in all_projects:
             m = pro
@@ -179,7 +179,7 @@ def seenITHub():
             print('*'*100)
 
         if request.method == 'POST':
-           
+
             title = request.form.get('title')
             description = request.form.get('description')
             files = request.files.getlist('projects')
@@ -190,22 +190,22 @@ def seenITHub():
 
             if title == '':
                 raise ValueError('Title cannot be empty!')
-            
+
             if profile is None:
                 raise ValueError('You need to create your profile first')
-            
+
             if not files:
                 raise ValueError('You need to upload a file!')
 
-            
+
             # pix_format = ['.jpg', '.jpeg', '.png', '.webp', '.gif']
             # video_format = ['.mp4', '.mov', '.webm']
-            
+
             processed_files = False
-    
+
             db_project = None
 
-            
+
 
             # db.session.add(newP)
             # db.session.commit()
@@ -214,7 +214,7 @@ def seenITHub():
 
             #     if media.filename == '':
             #         raise ValueError('Kindly upload a media file!')
-                
+
 
             #     media_name = media.filename
             #     _, ext = os.path.splitext(media_name)
@@ -224,12 +224,12 @@ def seenITHub():
             #         db_project = secrets.token_hex(10) + ext
             #         media.save('pkg/static/uploads/project/project_pix/'+db_project)
 
-            #         newM = ProjectMedia(project_id=newP.project_id, 
-            #                             file_type=file_type, 
+            #         newM = ProjectMedia(project_id=newP.project_id,
+            #                             file_type=file_type,
             #                             filename=db_project
             #                             )
 
-            #     else: 
+            #     else:
 
             #         raise ValueError(f'file format for {media_name} not supported!')
 
@@ -237,19 +237,19 @@ def seenITHub():
             #         file_type = 'video'
             #         db_project = secrets.token_hex(10) + ext
             #         media.save('pkg/static/uploads/project/project_video/'+db_project)
-                
-            #         newM = ProjectMedia(project_id=newP.project_id, 
-            #                             file_type=file_type, 
+
+            #         newM = ProjectMedia(project_id=newP.project_id,
+            #                             file_type=file_type,
             #                             filename=db_project
             #                             )
-                
 
-            #     else: 
+
+            #     else:
             #         db.session.delete(newP)
             #         db.session.commit()
 
             #         raise ValueError(f'file format for {media_name} not supported!')
-                
+
             #     db.session.add(newM)
             #     db.session.commit()
 
@@ -257,13 +257,13 @@ def seenITHub():
                     user_id = user_id,
                     title=title,
                     description=description,
-                    profile_id=profile.id 
+                    profile_id=profile.id
                 )
             db.session.add(newP)
             db.session.commit()
 
             if files:
-                    
+
                     pix_format = ['.jpg', '.jpeg', '.png', '.webp', '.gif']
                     video_format = ['.mp4', '.mov', '.webm']
 
@@ -277,15 +277,14 @@ def seenITHub():
 
                             if ext.lower() not in pix_format and ext.lower() not in video_format:
                                 raise ValueError(f'file format not supported! {media.filename}, {ext}')
-                            
+
                             if ext.lower() in pix_format:
                                 file_type = 'image'
                                 newname = secrets.token_hex(10) + ext
-                                media.save('pkg/static/uploads/project/project_pix/'+newname)
+                                media.save(os.path.join(current_app.root_path, 'static', 'uploads', 'project', 'project_pix', newname))
 
-                            
-                                new_media = ProjectMedia(project_id=newP.project_id, 
-                                        file_type=file_type, 
+                                new_media = ProjectMedia(project_id=newP.project_id,
+                                        file_type=file_type,
                                         filename=newname
                                         )
 
@@ -294,11 +293,11 @@ def seenITHub():
                         if ext.lower() in video_format:
                                 file_type = 'video'
                                 newname = secrets.token_hex(10) + ext
-                                media.save('pkg/static/uploads/project/project_video/'+newname)
+                                media.save(os.path.join(current_app.root_path, 'static', 'uploads', 'project', 'project_video', newname))
 
-                            
-                                new_media = ProjectMedia(project_id=newP.project_id, 
-                                        file_type=file_type, 
+
+                                new_media = ProjectMedia(project_id=newP.project_id,
+                                        file_type=file_type,
                                         filename=newname
                                         )
 
@@ -311,7 +310,7 @@ def seenITHub():
 
                     flash('Project uploaded successfully!','success')
                     return redirect(url_for('seenITHub'))
-            
+
             else: raise ValueError('You need to upload a file!')
 
         return render_template(
@@ -327,13 +326,13 @@ def seenITHub():
             projects=all_projects,
             user=user,
             user_projects=profile.projects if profile else [])
-    
+
     except CSRFError as e:
         flash(f'CSRF Error: {e}', 'danger')
     except ValueError as ve:
         flash(str(ve), 'danger')
         return redirect(url_for('seenITHub'))
-                 
+
 
 # *********************************** SEENIT HUB PAGE **************************************************
 
@@ -346,19 +345,19 @@ def seenITHub():
 def category_filter():
     try:
         cat_id = request.form.get('category_id')
-        
+
         # Fetch projects based on filter
         if cat_id:
             projects = db.session.query(Project).filter(Project.category_id == cat_id).all()
         else:
             # If no category is selected, get all projects
             projects = db.session.query(Project).all()
-            
+
         # Check if the request is an AJAX request (for filtering)
         if request.headers.get('X-Requested-With') == 'XMLHttpRequest':
             # Render JUST the project grid HTML using a template string or a Jinja macro
             data2send = render_template('users/projectfilter.html', projects=projects)
-        
+
         return data2send
     except Exception as e:
         app.logger.error(f"Error in category_filter: {str(e)}", exc_info=True)
@@ -422,7 +421,7 @@ def profile_page(id):
         username = user.username
         phone = user.phone
         email = user.email
-    
+
 
         return render_template('users/profile_page.html',user=user,
                                                         name=name,
@@ -500,9 +499,9 @@ def profile_form(id):
         db.session.rollback()
         flash(f'An error occurred: {e}', 'error')
         return redirect(url_for('profile_page', id=id))
-                                                    
 
-  
+
+
 
 # *********************************** PROFILE FORM **************************************************
 
@@ -513,7 +512,7 @@ def profile_form(id):
 def time_ago_filter(dt):
     now = datetime.utcnow()
     diff = now - dt
-    
+
     periods = [
         ('year', 365*24*60*60),
         ('month', 30*24*60*60),
@@ -521,7 +520,7 @@ def time_ago_filter(dt):
         ('hour', 60*60),
         ('minute', 60)
     ]
-    
+
     for period, seconds in periods:
         value = diff.total_seconds() // seconds
         if value:
@@ -555,7 +554,7 @@ def all_projects(id):
 def project(id, title, profile_id):
     print(title)
     user = Users.query.get_or_404(id)
-    project = db.session.query(Project).filter(Project.user_id == id, Project.profile_id == profile_id, Project.title == title).first() 
+    project = db.session.query(Project).filter(Project.user_id == id, Project.profile_id == profile_id, Project.title == title).first()
     # project = db.session.query(Project).join(Users, Project.user_id == Users.id).filter(Project.profile_id == profile_id, Project.datereg_project == date).all()
     profile = db.session.query(Profile).get_or_404(profile_id)
 
@@ -668,20 +667,20 @@ def filter_by_category(category_id):
     try:
         # Fetch the category by ID
         category = db.session.query(Category).get_or_404(category_id)
-        
+
         # Fetch all users who have projects in the specified category
         users = db.session.query(Users)\
             .join(Project, Users.id == Project.user_id)\
             .filter(Project.category_id == category.id)\
             .distinct()\
             .all()
-        
+
         if not users:
             flash('No users found in this category.', 'info')
             return redirect(url_for('seenITHub'))
 
-        return render_template('users/filter_by_category.html', 
-                               users=users, 
+        return render_template('users/filter_by_category.html',
+                               users=users,
                                category=category)
 
     except Exception as e:

@@ -3,7 +3,7 @@
 {% block description %}
 <meta name="description" content="Engage with content creators, discover amazing projects, and connect with a vibrant community on seenIT. Share your voice and be seen.">
 {% endblock %}
-            
+
 {% block keywords %}
 <meta name="keywords" content="seenIT, promote work, showcase talent, social networking, personal branding, online portfolio, connect with clients, advertise services, grow business, creative platform">
 {% endblock %}
@@ -186,8 +186,8 @@
 
     <!-- Profile Section -->
     <div class="container mt-5">
-        <div class="profile-cover" style="background-image: url('/static/uploads/cover_pix/{{ user.profile.cover_pix if user.profile.cover_pix else 'avatar.jpg' }}');">
-            <img src="/static/uploads/profile_pix/{{ user.profile.profile_pix if user.profile.profile_pix else 'avatar.jpg' }}" alt="profile picture">
+        <div class="profile-cover" style="background-image: url('/static/uploads/cover_pix/{{ user.profile.cover_pix if user.profile.cover_pix else 'avatar.png' }}');">
+            <img src="/static/uploads/profile_pix/{{ user.profile.profile_pix if user.profile.profile_pix else 'avatar.png' }}" alt="profile picture">
         </div>
 
         <div class="row mt-5">
@@ -225,7 +225,7 @@
                             {% set messages = get_flashed_messages(with_categories=True) %}
                             {% if messages %}
                                 {% for category, message in messages %}
-                                    <div class="alert alert-{{ category }} 
+                                    <div class="alert alert-{{ category }}
                                                 alert-dismissible fade show" role="alert">
                                             {{ message }}
                                         <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
@@ -269,8 +269,11 @@
             {% for p in projects %}
             <div class="col-md-4 mb-4">
                 <div class="card project-card">
-                    <div class="project-header" style="background-image: url('/static/uploads/cover_pix/{{ p.owner.cover_pix | default('avatar.jpg') }}');">
-                        <img src="/static/uploads/profile_pix/{{ p.owner.profile_pix | default('avatar.jpg') }}">
+                    <div class="project-header"
+                         style="background-image: url('{{ url_for('static', filename='uploads/cover_pix/' + (p.owner.cover_pix or 'avatar.png')) }}');">
+
+                        <img src="{{ url_for('static', filename='uploads/profile_pix/' + (p.owner.profile_pix or 'avatar.png')) }}"
+                             alt="Profile picture">
                     </div>
                     <div class="card-body project-body">
                         <h5><a href="/profile/page/{{ p.user.id }}" class="text-dark">{{ p.user.fname }} {{ p.user.lname }}</a></h5>
@@ -286,7 +289,7 @@
 
                         <div class="row media-group">
                             {% for media in p.media %}
-                            
+
                                 {% if media.file_type == 'image' %}
                                 <div class="col-5 m-1">
                                     <img src="/static/uploads/project/project_pix/{{ media.filename }}" class="media-item">
@@ -325,9 +328,9 @@
 
 <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
 {% endblock %}
-<script 
-        src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js" 
-        integrity="sha384-YvpcrYf0tY3lHB60NNkmXc5s9fDVZLESaAA55NDzOxhy9GkcIdslK1eN7N6jIeHz" 
+<script
+        src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"
+        integrity="sha384-YvpcrYf0tY3lHB60NNkmXc5s9fDVZLESaAA55NDzOxhy9GkcIdslK1eN7N6jIeHz"
         crossorigin="anonymous">
 </script>
 
@@ -338,7 +341,7 @@
 					event.preventDefault();
 
 					var form_data = new FormData($('#projectform')[0]);
-					
+
 					$.ajax({
 						url: '/seenIT/hub/db/',
                         type: 'POST',
@@ -361,7 +364,7 @@
 							if (rsp.status == 'empty') {
 								$('#info').addClass('alert alert-danger mt-2').fadeIn(8000);
 								$('#info').html(rsp.msg).fadeIn(8000)
-						
+
 							}else if (rsp.status == 'None') {$('#info').removeClass().addClass('alert alert-danger')
                                 .html(rsp.msg)
                                 .fadeIn();
@@ -379,21 +382,21 @@
 								$('#info').addClass('alert alert-success mt-2').fadeIn(8000);
 								$('#info').html(rsp.msg).fadeIn(8000)
 								$('.form-control').val('')
-								
+
 							}else {
-							
+
 							$('#info').addClass('alert alert-danger mt-2');
 							$('#info').html(rsp.msg);
 							}
 
-							
+
 						},
 
 						beforeSend: function(){
 							$('#info').html('<div class = "spinner-border text-warning" ><span>Updating Profile. . .</span></div>')
 						},
 						complete: function() {
-							
+
 							if ($('#info').hasClass('alert-success')) {
 								$('#btn').html('Profile Updated');
 							}
